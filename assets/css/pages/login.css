@@ -1,0 +1,243 @@
+/* =====================================================================
+   pages/login.css
+   Split-screen layout: brand panel (left) with a "scan-frame" corner-
+   bracket motif evoking the face-recognition identity of the product,
+   and the actual login form (right).
+   ===================================================================== */
+
+.login-page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+}
+
+/* ---------------------------------------------------------------------
+   BRAND PANEL — signature element lives here
+   --------------------------------------------------------------------- */
+.login-brand {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: var(--space-8);
+    background: linear-gradient(160deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: #FFFFFF;
+    overflow: hidden;
+}
+
+.login-brand-content {
+    position: relative;
+    z-index: 2;
+    max-width: 420px;
+}
+
+.login-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-display);
+    font-size: 1.375rem;
+    font-weight: 700;
+    margin-bottom: var(--space-7);
+}
+
+.login-logo-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary-dark);
+    font-weight: 700;
+}
+
+.login-brand h1 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: #FFFFFF;
+    margin-bottom: var(--space-4);
+}
+
+.login-brand p {
+    font-size: 1.0625rem;
+    color: rgba(255, 255, 255, 0.78);
+    line-height: 1.6;
+}
+
+/* Scan-frame corner brackets — the signature element. A viewfinder/
+   face-ID frame, built purely from border corners, sitting behind the
+   text as an ambient motif rather than literal decoration. */
+.login-scan-frame {
+    position: absolute;
+    inset: var(--space-8);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.login-scan-frame::before,
+.login-scan-frame::after,
+.login-scan-frame span::before,
+.login-scan-frame span::after {
+    content: "";
+    position: absolute;
+    width: 56px;
+    height: 56px;
+    border: 2px solid var(--accent);
+    opacity: 0.45;
+}
+
+.login-scan-frame::before {
+    top: 0;
+    left: 0;
+    border-right: none;
+    border-bottom: none;
+}
+
+.login-scan-frame::after {
+    top: 0;
+    right: 0;
+    border-left: none;
+    border-bottom: none;
+}
+
+.login-scan-frame span::before {
+    bottom: 0;
+    left: 0;
+    border-right: none;
+    border-top: none;
+}
+
+.login-scan-frame span::after {
+    bottom: 0;
+    right: 0;
+    border-left: none;
+    border-top: none;
+}
+
+/* Subtle ambient scan-line sweep across the brand panel */
+.login-scan-line {
+    position: absolute;
+    inset: var(--space-8);
+    z-index: 1;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.login-scan-line::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent) 50%, transparent);
+    opacity: 0.6;
+    animation: login-scan-sweep 4.5s ease-in-out infinite;
+}
+
+@keyframes login-scan-sweep {
+
+    0%,
+    100% {
+        top: 0%;
+        opacity: 0;
+    }
+
+    10% {
+        opacity: 0.6;
+    }
+
+    50% {
+        top: 100%;
+        opacity: 0.6;
+    }
+
+    60% {
+        opacity: 0;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .login-scan-line::before {
+        animation: none;
+        opacity: 0;
+    }
+}
+
+/* ---------------------------------------------------------------------
+   FORM PANEL
+   --------------------------------------------------------------------- */
+.login-form-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6);
+    background: var(--bg);
+}
+
+.login-form-card {
+    width: 100%;
+    max-width: 380px;
+}
+
+.login-form-card h2 {
+    margin-bottom: var(--space-2);
+}
+
+.login-form-card .text-muted {
+    margin-bottom: var(--space-6);
+    display: block;
+}
+
+.login-form-error {
+    display: none;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-sm);
+    background: var(--danger-soft);
+    color: var(--danger);
+    font-size: 0.875rem;
+    margin-bottom: var(--space-5);
+}
+
+.login-form-error.visible {
+    display: flex;
+}
+
+/* ---------------------------------------------------------------------
+   RESPONSIVE — brand panel becomes a compact top banner on mobile
+   --------------------------------------------------------------------- */
+@media (max-width: 860px) {
+    .login-page {
+        grid-template-columns: 1fr;
+    }
+
+    .login-brand {
+        padding: var(--space-6);
+        min-height: 200px;
+    }
+
+    .login-brand h1 {
+        font-size: 1.5rem;
+    }
+
+    .login-brand p {
+        display: none;
+        /* tagline dropped on mobile, logo + heading is enough */
+    }
+
+    .login-scan-frame,
+    .login-scan-line {
+        inset: var(--space-5);
+    }
+
+    .login-scan-frame::before,
+    .login-scan-frame::after,
+    .login-scan-frame span::before,
+    .login-scan-frame span::after {
+        width: 36px;
+        height: 36px;
+    }
+}

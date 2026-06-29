@@ -1,11 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Sign in · AttendU</title>
+
+    <link rel="stylesheet" href="assets/css/base/reset.css">
+    <link rel="stylesheet" href="assets/css/base/variables.css">
+    <link rel="stylesheet" href="assets/css/base/typography.css">
+    <link rel="stylesheet" href="assets/css/components/buttons.css">
+    <link rel="stylesheet" href="assets/css/components/forms.css">
+    <link rel="stylesheet" href="assets/css/components/toast.css">
+    <link rel="stylesheet" href="assets/css/components/loader.css">
+    <link rel="stylesheet" href="assets/css/pages/login.css">
 </head>
+
 <body>
-    
+
+    <div class="login-page">
+
+        <!-- ============ BRAND PANEL ============ -->
+        <div class="login-brand">
+            <div class="login-scan-line"></div>
+            <div class="login-scan-frame"><span></span></div>
+
+            <div class="login-brand-content">
+                <div class="login-logo">
+                    <span class="login-logo-mark">A</span>
+                    AttendU
+                </div>
+                <h1>Attendance, recognized.</h1>
+                <p>AI-powered face recognition turns every session into accurate attendance — no roll calls, no
+                    paperwork, no guesswork.</p>
+            </div>
+        </div>
+
+        <!-- ============ FORM PANEL ============ -->
+        <div class="login-form-panel">
+            <div class="login-form-card">
+                <h2>Welcome back</h2>
+                <span class="text-muted">Sign in to manage your courses and sessions.</span>
+
+                <div id="login-error" class="login-form-error" role="alert">
+                    <span id="login-error-text"></span>
+                </div>
+
+                <form id="login-form" novalidate>
+                    <div class="form-group">
+                        <label class="form-label" for="email">Email</label>
+                        <input class="form-input" type="email" id="email" name="email" placeholder="you@university.edu"
+                            autocomplete="username">
+                        <span class="form-error" id="email-error"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password</label>
+                        <div class="form-input-wrap">
+                            <input class="form-input" type="password" id="password" name="password"
+                                placeholder="••••••••" autocomplete="current-password">
+                            <button class="form-input-toggle" type="button" id="toggle-password">Show</button>
+                        </div>
+                        <span class="form-error" id="password-error"></span>
+                    </div>
+
+                    <button class="btn btn-primary btn-block" type="submit" id="login-submit">
+                        Sign in
+                    </button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Core scripts — order matters: storage/config have no dependencies,
+            api depends on both, auth depends on api+storage, ui/utils/validators are independent. -->
+    <script src="assets/js/core/storage.js"></script>
+    <script src="assets/js/core/config.js"></script>
+    <script src="assets/js/core/api.js"></script>
+    <script src="assets/js/core/auth.js"></script>
+    <script src="assets/js/core/ui.js"></script>
+    <script src="assets/js/core/utils.js"></script>
+    <script src="assets/js/core/validators.js"></script>
+
+    <script src="assets/js/pages/login.js"></script>
 </body>
+
 </html>

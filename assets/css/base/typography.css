@@ -1,0 +1,62 @@
+/* =====================================================================
+   base/typography.css
+   Font imports + base type styles. Load after reset.css + variables.css.
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--ink);
+    background: var(--bg);
+}
+
+h1,
+h2,
+h3,
+h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--ink);
+}
+
+h1 {
+    font-size: 2.25rem;
+}
+
+h2 {
+    font-size: 1.75rem;
+}
+
+h3 {
+    font-size: 1.375rem;
+}
+
+h4 {
+    font-size: 1.125rem;
+}
+
+p {
+    line-height: 1.6;
+}
+
+.text-muted {
+    color: var(--muted);
+}
+
+.text-mono {
+    font-family: var(--font-mono);
+}
+
+/* Use on any wrapper containing Arabic content where the whole block
+   should flow right-to-left (e.g. a student's Arabic name + details). */
+.rtl {
+    direction: rtl;
+    text-align: right;
+}

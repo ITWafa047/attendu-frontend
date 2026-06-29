@@ -1,0 +1,116 @@
+/* Foundational Reset - loaded before variables.css
+	 - predictible box-sizing
+	 - remove default margins
+	 - accessible focus-visible outlines
+	 - reduced-motion support
+*/
+
+/* Box sizing: make layout calculations easier */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+/* Remove default body margin and ensure full-height */
+html,
+body {
+    height: 100%;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: inherit;
+    color: inherit;
+    background: transparent;
+}
+
+/* Images, video and other replaced elements */
+img,
+picture,
+video,
+canvas,
+svg {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* Inherit fonts for form elements for consistency */
+input,
+button,
+textarea,
+select {
+    font: inherit;
+}
+
+/* Prevent text overflow issues */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    overflow-wrap: break-word;
+}
+
+/* Remove list styles where not needed */
+ul[role='list'],
+ol[role='list'] {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+/* Button defaults */
+button {
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+}
+
+/* Tables */
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* Hide elements with the hidden attribute */
+[hidden] {
+    display: none !important;
+}
+
+/* Remove tap highlight on mobile */
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* Respect users who prefer reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.001s !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001s !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Accessible focus-visible outline for keyboard users only */
+:focus:not(:focus-visible) {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 3px solid rgba(59, 130, 246, 0.9);
+    outline-offset: 2px;
+}
