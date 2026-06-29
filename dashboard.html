@@ -1,11 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" dir="ltr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dashboard · AttendU</title>
+
+    <link rel="stylesheet" href="assets/css/base/reset.css">
+    <link rel="stylesheet" href="assets/css/base/variables.css">
+    <link rel="stylesheet" href="assets/css/base/typography.css">
+    <link rel="stylesheet" href="assets/css/layout/layout.css">
+    <link rel="stylesheet" href="assets/css/layout/sidebar.css">
+    <link rel="stylesheet" href="assets/css/layout/navbar.css">
+    <link rel="stylesheet" href="assets/css/components/buttons.css">
+    <link rel="stylesheet" href="assets/css/components/toast.css">
+    <link rel="stylesheet" href="assets/css/components/loader.css">
 </head>
+
 <body>
-    
+
+    <div class="app-shell">
+        <aside id="sidebar"></aside>
+
+        <div class="app-main">
+            <header id="navbar"></header>
+
+            <main class="app-content">
+                <!-- 🚧 Placeholder — the real Dashboard module (stat cards from
+                     GET /dashboard/stats) replaces this when we get to that module.
+                     This page exists right now only to host/test the sidebar + navbar shell. -->
+                <p class="text-muted">Dashboard content goes here — built in the Dashboard module.</p>
+            </main>
+        </div>
+    </div>
+
+    <!-- Core scripts -->
+    <script src="assets/js/core/storage.js"></script>
+    <script src="assets/js/core/config.js"></script>
+    <script src="assets/js/core/api.js"></script>
+    <script src="assets/js/core/auth.js"></script>
+    <script src="assets/js/core/ui.js"></script>
+    <script src="assets/js/core/utils.js"></script>
+    <script src="assets/js/core/validators.js"></script>
+
+    <!-- Shared shell components -->
+    <script src="assets/js/components/sidebar.js"></script>
+    <script src="assets/js/components/navbar.js"></script>
+
+    <script>
+        guardPage(); // any logged-in user (admin or instructor) can land here
+        renderAppShell({ activeKey: "dashboard", pageTitle: "Dashboard" });
+    </script>
 </body>
+
 </html>

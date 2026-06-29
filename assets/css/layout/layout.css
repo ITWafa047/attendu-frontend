@@ -1,0 +1,84 @@
+/* =====================================================================
+   layout/layout.css
+   App shell skeleton used by every protected page:
+
+   <div class="app-shell">
+     <aside id="sidebar"></aside>
+     <div class="app-main">
+       <header id="navbar"></header>
+       <main class="app-content"> ...page content... </main>
+     </div>
+   </div>
+   ===================================================================== */
+
+.app-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+#sidebar {
+    width: 260px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 100;
+    overflow-y: auto;
+    transition: transform var(--transition-base);
+}
+
+.app-main {
+    flex: 1;
+    margin-left: 260px;
+    /* offset for the fixed sidebar */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+#navbar {
+    height: 64px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.app-content {
+    flex: 1;
+    padding: var(--space-6);
+}
+
+/* ---------------------------------------------------------------------
+   MOBILE — sidebar becomes an off-canvas drawer toggled by the navbar
+   --------------------------------------------------------------------- */
+@media (max-width: 900px) {
+    #sidebar {
+        transform: translateX(-100%);
+    }
+
+    body.sidebar-open #sidebar {
+        transform: translateX(0);
+        box-shadow: var(--shadow-lg);
+    }
+
+    /* Dim backdrop behind the open drawer */
+    body.sidebar-open::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(16, 24, 40, 0.45);
+        z-index: 90;
+    }
+
+    .app-main {
+        margin-left: 0;
+    }
+
+    .app-content {
+        padding: var(--space-4);
+    }
+}
