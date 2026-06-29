@@ -26,8 +26,7 @@ async function laravelRequest(endpoint, options = {}) {
  * into the URL building step instead of the headers.
  */
 async function pythonRequest(endpoint, options = {}) {
-    const headers = { "X-API-Key": PYTHON_CONFIG.API_KEY, ...options.headers };
-    return apiRequest(PYTHON_CONFIG.BASE_URL, endpoint, { ...options, headers, withAuth: false });
+    return apiRequest(PYTHON_CONFIG.BASE_URL, endpoint, { ...options, headers, withAuth: true });
 }
 
 /**
