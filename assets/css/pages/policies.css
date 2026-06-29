@@ -1,0 +1,82 @@
+/* =====================================================================
+   pages/policies.css
+   Styles for Attendance Policies page.
+   ===================================================================== */
+
+.policies-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-5);
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.policies-toolbar {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: var(--space-4);
+}
+
+.policies-toolbar .form-group {
+    margin-bottom: 0;
+}
+
+.policies-search-wrap {
+    position: relative;
+    flex: 1 1 240px;
+    min-width: 180px;
+}
+
+.policies-search-wrap .form-input {
+    padding-right: 36px;
+    width: 100%;
+}
+
+.policies-search-wrap .search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+    width: 18px;
+    height: 18px;
+}
+
+/* ----- Policy form inside modal ----- */
+.policy-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+}
+
+.policy-form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 720px) {
+    .policy-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ----- Table columns ----- */
+.table .policy-name-col {
+    font-weight: 500;
+}
+
+.table .policy-threshold-col {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.table .policy-description-col {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
