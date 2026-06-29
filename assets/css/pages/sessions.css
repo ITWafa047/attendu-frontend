@@ -1,0 +1,104 @@
+/* =====================================================================
+   pages/sessions.css
+   Sessions page styles – overrides and additions.
+   ===================================================================== */
+
+.sessions-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-5);
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.sessions-toolbar {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: var(--space-4);
+}
+
+.sessions-toolbar .form-group {
+    margin-bottom: 0;
+}
+
+.sessions-search-wrap {
+    position: relative;
+    flex: 1 1 240px;
+    min-width: 180px;
+}
+
+.sessions-search-wrap .form-input {
+    padding-right: 36px;
+    width: 100%;
+}
+
+.sessions-search-wrap .search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+    width: 18px;
+    height: 18px;
+}
+
+/* ----- Session form inside modal ----- */
+.session-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+}
+
+.session-form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 720px) {
+    .session-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ----- Table column widths & status badges ----- */
+.table .session-title-col {
+    font-weight: 500;
+}
+
+.table .session-time-col {
+    font-size: 0.85rem;
+    color: var(--muted);
+    white-space: nowrap;
+}
+
+.session-status-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.session-status-scheduled {
+    background: var(--info-soft);
+    color: var(--info);
+}
+
+.session-status-ongoing {
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.session-status-completed {
+    background: var(--success-soft);
+    color: var(--success);
+}
+
+.session-status-cancelled {
+    background: var(--danger-soft);
+    color: var(--danger);
+}
