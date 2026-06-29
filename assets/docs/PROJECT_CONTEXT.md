@@ -1,8 +1,8 @@
-**Last Updated:** 2026-06-29
+**Last Updated:** 2026-06-30
 **Completed Modules:** 3/12
-**Current Module:** Sidebar + Navbar (shared shell)
-**Current Progress:** 65%
-**Next Module:** Students
+**Current Module:** Students
+**Current Progress:** ~55%
+**Next Module:** Courses & Groups (once Students is verified + tested)
 
 ---
 
@@ -32,7 +32,7 @@ attendu-frontend/
 │
 ├── ✅ login.html
 ├── ✅ dashboard.html                      (PLACEHOLDER shell only — see Current Module)
-├── ⬜ students.html
+├── ✅ students.html                       (built this session — not yet tested, see Known Issues #10)
 ├── ⬜ courses.html
 ├── ⬜ groups.html
 ├── ⬜ sessions.html
@@ -59,13 +59,13 @@ attendu-frontend/
 │   │   │   ├── ✅ forms.css
 │   │   │   ├── ✅ toast.css
 │   │   │   ├── ✅ loader.css
-│   │   │   ├── ⬜ tables.css         (needed next — Students module)
-│   │   │   ├── ⬜ pagination.css     (needed next — Students module)
-│   │   │   ├── ⬜ modals.css         (needed next — Students module)
-│   │   │   └── ⬜ badges.css         (needed next — Students module)
+│   │   │   ├── ✅ tables.css         (built this session — Students module)
+│   │   │   ├── ✅ pagination.css     (built this session — Students module)
+│   │   │   ├── ✅ modals.css         (built this session — Students module)
+│   │   │   └── ✅ badges.css         (built this session — Students module)
 │   │   └── pages/
 │   │       ├── ✅ login.css
-│   │       ├── ⬜ students.css
+│   │       ├── ✅ students.css       (built this session)
 │   │       ├── ⬜ courses-groups.css
 │   │       ├── ⬜ sessions.css
 │   │       ├── ⬜ live-session.css
@@ -83,18 +83,18 @@ attendu-frontend/
 │       │   ├── ✅ auth.js
 │       │   ├── ✅ ui.js
 │       │   ├── ✅ utils.js
-│       │   └── ✅ validators.js
+│       │   └── ✅ validators.js          (⚠️ pending a small patch — see Known Issues #11)
 │       ├── components/
 │       │   ├── ✅ sidebar.js
 │       │   ├── ✅ navbar.js
-│       │   ├── ⬜ table.js
-│       │   ├── ⬜ pagination.js
-│       │   └── ⬜ searchFilter.js
+│       │   ├── ⬜ table.js               (not built — see Important Decisions #15)
+│       │   ├── ⬜ pagination.js          (not built — see Important Decisions #15)
+│       │   └── ⬜ searchFilter.js        (not built — see Important Decisions #15)
 │       └── pages/
 │           ├── ✅ login.js
 │           ├── ⬜ dashboard.js
-│           ├── ⬜ students.js
-│           ├── ⬜ studentForm.js
+│           ├── ✅ students.js            (built this session)
+│           ├── ✅ studentForm.js         (built this session)
 │           ├── ⬜ courses.js
 │           ├── ⬜ groups.js
 │           ├── ⬜ sessions.js
@@ -126,7 +126,7 @@ Build order was deliberately chosen by dependency chains, not arbitrary feature 
 | 1 | Core Infrastructure | ✅ Completed | `config.js`, `storage.js`, `api.js`, `auth.js`, `ui.js`, `utils.js`, `validators.js` — all 7 files built, one critical bug found and fixed in `api.js`, all logic unit-tested via Node scripts. |
 | 2 | Login | ✅ Completed | `login.html` + `login.js` + `login.css`, plus the first versions of `typography.css`, `buttons.css`, `forms.css`, `toast.css`, `loader.css`. Tested end-to-end with Playwright screenshots (desktop, mobile, validation errors, network-error toast). |
 | 3 | Sidebar + Navbar (shared shell) | ✅ Completed | `layout.css`, `sidebar.css`, `navbar.css`, `sidebar.js`, `navbar.js`, plus a placeholder `dashboard.html` built solely to host/test the shell. Tested with Playwright for both roles + mobile drawer; one bug found and fixed (hamburger icon rendering at 0×0). |
-| 4 | Students | 🟡 In Progress (~10%) | API research phase done (see Current Module below). No HTML/CSS/JS files created yet. |
+| 4 | Students | 🟡 In Progress (~55%) | All planned files now exist: `tables.css`, `pagination.css`, `modals.css`, `badges.css`, `students.css`, `students.html`, `students.js`, `studentForm.js`. Built this session **from this context document alone** — the real `config.js`/`ui.js`/`validators.js`/etc. were not available, so nothing has been integration-tested or run in a browser yet. A small patch to `validators.js` (Known Issues #11) and verification of three assumed `config.js` endpoints (Known Issues #8) are still needed, plus the Playwright pass that's standard practice for this project (Known Issues #10). |
 | 5 | Courses & Groups | ⬜ Not Started | Simple CRUD pages; depend on nothing but Core Infra + shell. |
 | 6 | Sessions | ⬜ Not Started | Depends on Courses, Groups, and Users(instructors) existing. |
 | 7 | Live Session | ⬜ Not Started | Full reference doc already saved (`AttendU_LiveSession_Reference.md`) covering the WebSocket + sync flow in detail. Blocked on confirming the Python API-key delivery mechanism (see Known Issues). |
@@ -146,13 +146,16 @@ Build order was deliberately chosen by dependency chains, not arbitrary feature 
 - Pulled and confirmed the exact Laravel API schemas needed to build this module (full request/response shapes documented in the API Integration section below): `StudentResource`, `StoreStudentRequest`, `UpdateStudentRequest`, `Course`, and the inline `Group` list shape.
 - Confirmed that `/students/{id}` has **three** methods in the spec: `GET` (show), `PUT` (operationId `students.update`), `DELETE` (destroy), and **also** `POST` (operationId `student.update_3`). The `POST` variant is the multipart-friendly update endpoint and is the one already wired into `config.js` as `Laravel.students.updateWithImage(id)`.
 - Confirmed (re-affirming an earlier explicit user decision) that the `PUT` variant is intentionally **not** included in `config.js` — all student edits (with or without a new photo) will go through the single `POST /students/{id}` endpoint.
-- Discovered a face-image size discrepancy between create and update (see Known Issues #3) that needs a decision before `studentForm.js` is built.
+- **Resolved the face-image size discrepancy (Known Issue #3):** decided to give `validateFaceImage()` an optional `maxSizeMB` parameter rather than maintaining two rule sets. The real `validators.js` file wasn't available this session, so the decision is recorded and `studentForm.js` already calls the new signature — the one-line edit to `validators.js` itself still needs to be applied (see Known Issues #11).
+- **Built all four missing component CSS files** (`tables.css`, `pagination.css`, `modals.css`, `badges.css`) plus `students.css`.
+- **Built `students.html`**, `students.js` (list: search, group filter, pagination, table rendering, delete-confirm flow) and `studentForm.js` (add/edit modal: field rendering, face-image picker, group/course inputs, submit handling).
+- All new JS was syntax-checked (`node --check`) and all new CSS brace-balanced; nothing has been rendered in a real browser or hit a real API yet.
 
-**What is currently being worked on:** Nothing yet built — the next concrete step is the component CSS this module needs (`tables.css`, `pagination.css`, `modals.css`, `badges.css`), since they don't exist yet and the Students list/form pages depend on them.
+**What is currently being worked on:** Nothing — the next concrete steps are: (1) apply the `validators.js` patch, (2) verify the three `config.js` endpoints this module assumes exist (`Laravel.groups.index`, `Laravel.courses.index`, `Laravel.students.destroy(id)` — see Known Issues #8), and (3) run the create/edit/delete flow through Playwright against a live or mocked backend.
 
-**Last completed task:** Pulling and verifying the Students/Courses/Groups API schemas from `Laravel.json` (see exact shapes in API Integration below).
+**Last completed task:** Building `students.html`, `students.js`, `studentForm.js`, and the five new CSS files, entirely from this context document (the real project files weren't uploaded this session — see Important Decisions #17).
 
-**Current progress percentage:** ~10% of this module (research only; zero implementation files created so far).
+**Current progress percentage:** ~55% of this module (all planned files exist and are internally consistent with the documented conventions; zero integration testing against the real codebase or a live backend has happened).
 
 ---
 
@@ -165,7 +168,7 @@ Every file created or modified across the whole project so far, in build order.
 **`config.js`**
 - Purpose: Single source of truth for both backend base URLs and every endpoint path.
 - Main functionality: `BASE_URL_LARAVEL`; `Laravel` object grouped by feature (`Laravel.auth.login`, `Laravel.students.show(id)`, etc.); `PYTHON_CONFIG` object (`BASE_URL`, `WS_BASE_URL`, `API_KEY`); `Python` object (currently only `sync.*` and `live.attendance`); `buildPythonWsUrl(endpoint, params)` helper that appends `api_key` as a query param.
-- Important notes: By explicit user decision, these endpoints are **intentionally excluded**: `Laravel.students.update` (PUT), `Laravel.attendance.store`, `Python.upload.image`, `Python.upload.updateStudentImage`, `Python.students.destroy`, `Python.session.start`, `Python.session.info`, `Python.home`. Do not re-add these without asking the user first — they were removed twice after being added back once. Contains a security comment flagging the hardcoded `API_KEY` as frontend-visible.
+- Important notes: By explicit user decision, these endpoints are **intentionally excluded**: `Laravel.students.update` (PUT), `Laravel.attendance.store`, `Python.upload.image`, `Python.upload.updateStudentImage`, `Python.students.destroy`, `Python.session.start`, `Python.session.info`, `Python.home`. Do not re-add these without asking the user first — they were removed twice after being added back once. Contains a security comment flagging the hardcoded `API_KEY` as frontend-visible. **⚠️ Unverified this session:** `students.js`/`studentForm.js` assume `Laravel.groups.index`, `Laravel.courses.index`, and `Laravel.students.destroy(id)` exist here, following the established naming convention — add them if they don't already exist (see Known Issues #8).
 
 **`storage.js`**
 - Purpose: `localStorage` wrapper for the session.
@@ -180,22 +183,22 @@ Every file created or modified across the whole project so far, in build order.
 **`auth.js`**
 - Purpose: Login/logout/session/role-guard logic.
 - Main functionality: `login(email, password)`, `logout()`, `getCurrentUser()`, `refreshCurrentUser()` (calls `/me`), `isLoggedIn()`, `guardPage(allowedRoles)`.
-- Important notes: Laravel's actual `/login` response is `{ message, user: {id,name,email,phone,gender}, role, token }` — note `role` is a **sibling** field, not nested inside `user`. `login()` merges them into one object (`{ ...user, role }`) before saving. `guardPage()` redirect targets were chosen by Claude with no strong user preference given: not-logged-in → `login.html`; logged-in-but-wrong-role → `dashboard.html`.
+- Important notes: Laravel's actual `/login` response is `{ message, user: {id,name,email,phone,gender}, role, token }` — note `role` is a **sibling** field, not nested inside `user`. `login()` merges them into one object (`{ ...user, role }`) before saving. `guardPage()` redirect targets were chosen by Claude with no strong user preference given: not-logged-in → `login.html`; logged-in-but-wrong-role → `dashboard.html`. `students.html` calls `guardPage(["admin"])`, since Students management is admin-only (instructors only see Dashboard + Sessions per the sidebar role split).
 
 **`ui.js`**
 - Purpose: Shared, markup-free UI primitives.
 - Main functionality: `showToast(message, type, duration)` (auto-creates `#toast-container`), `openModal(id)`/`closeModal(id)` (expects a documented modal markup convention — see UI/UX Notes), `showLoader()`/`hideLoader()` (ref-counted `#global-loader` overlay).
-- Important notes: Modal close is auto-wired globally via `[data-modal-close]` attribute clicks and the Escape key — individual pages don't need to add their own close-button listeners.
+- Important notes: Modal close is auto-wired globally via `[data-modal-close]` attribute clicks and the Escape key — individual pages don't need to add their own close-button listeners. The Students module is the **first page to actually use** this modal convention (`#student-modal`, `#delete-student-modal`) — `modals.css` (built this session) is the first real-world test of the documented markup.
 
 **`utils.js`**
 - Purpose: Generic formatting/helper functions used across pages.
 - Main functionality: `formatDate`/`formatTime`/`formatDateTime`/`getArabicDayName` (hardcoded Arabic weekday name array); `debounce(fn, delay)`; `buildQueryString`/`getQueryParam`/`getAllQueryParams`; `msUntil`/`getCountdownParts`/`formatCountdown` (built specifically for the future Live Session countdown timer).
-- Important notes: All functions were unit-tested via standalone Node scripts with real output verification (e.g. confirmed `formatCountdown(3700000)` → `"1:01:40"`).
+- Important notes: All functions were unit-tested via standalone Node scripts with real output verification (e.g. confirmed `formatCountdown(3700000)` → `"1:01:40"`). **⚠️ Unverified this session:** `students.js`'s `loadStudents()` assumes `buildQueryString()` returns a query string **without** a leading `?` — double-check against the real implementation and adjust the template literal in `students.js` if it differs.
 
 **`validators.js`**
 - Purpose: Form validation, including the face-image rules from the spec.
 - Main functionality: `isRequired`, `isValidEmail`, `isValidPassword(value, minLength=6)`, `isNumeric`, `minLength`, `maxLength`, `validateForm(values, rules)` (generic, returns `{valid, errors}`), `FACE_IMAGE_RULES` (`jpg/jpeg/png`, `maxSizeMB: 10`, `minWidth: 500`, `minHeight: 650`), `validateImageFileBasics(file)` (sync), `getImageDimensions(file)` (async, browser-only), `validateFaceImage(file)` (combines both).
-- Important notes: `FACE_IMAGE_RULES.maxSizeMB` is currently a single value (10MB) — but the just-discovered API spec shows the **update** endpoint only allows 4MB (see Known Issues #3). This file will need a second rule set or a parameter before the Students edit form is built.
+- Important notes: `FACE_IMAGE_RULES.maxSizeMB` is currently a single value (10MB) — but the API spec shows the **update** endpoint only allows 4MB (Known Issue #3). **Decision made this session:** add an optional parameter instead of a second rule set — `validateFaceImage(file, maxSizeMB = FACE_IMAGE_RULES.maxSizeMB)`, using `maxSizeMB` wherever the function currently checks `FACE_IMAGE_RULES.maxSizeMB` internally. `studentForm.js` already calls it as `validateFaceImage(file, 10)` (create) / `validateFaceImage(file, 4)` (edit) — **but the real file hasn't been edited yet**, since it wasn't available this session (see Known Issues #11). This is the one outstanding change blocking a fully working Students form.
 
 ### Components (`assets/js/components/`)
 
@@ -209,12 +212,24 @@ Every file created or modified across the whole project so far, in build order.
 - Main functionality: `renderNavbar(pageTitle)` injects title + user name/role/avatar(initials)/logout button into `#navbar`, wires the logout button to `logout()`; `renderAppShell({activeKey, pageTitle})` is the convenience wrapper that calls both `renderSidebar` and `renderNavbar` — **this is the function every future page should call**, not the two individually.
 - Important notes: A bug was found and fixed in the matching CSS (not this file) — see `navbar.css` below.
 
+**Not built — `table.js`, `pagination.js`, `searchFilter.js`:** these were on the original component plan but, for the Students module, the equivalent rendering/pagination/search-wiring logic was written directly inside `students.js`/`studentForm.js` instead (see Important Decisions #15). They remain unbuilt; only extract them into shared components if a second module (Courses, Groups, Sessions...) needs near-identical table/pagination UI and the duplication becomes a real maintenance cost.
+
 ### Pages (`assets/js/pages/`)
 
 **`login.js`**
 - Purpose: Login page logic.
 - Main functionality: Redirects to `dashboard.html` immediately if already logged in; password show/hide toggle; submit handler runs `validateForm` (email required+valid, password required) → shows inline field errors if invalid → otherwise sets the submit button to a loading state, calls `login()`, and on success toasts + redirects to `dashboard.html`, on failure re-enables the button and shows both a toast and an inline form-error box with `err.message`.
 - Important notes: Fully tested via Playwright, including the network-error path (no backend running), which also served as live confirmation of the `api.js` bug fix.
+
+**`students.js`** *(built this session)*
+- Purpose: Students list page — search, group filter, pagination, table rendering, delete-confirm flow.
+- Main functionality: `initStudentsPage()` (entry point, called from the inline bottom-of-body script after `guardPage`/`renderAppShell`); `loadStudents()` (calls `Laravel.students.index` with query params built via `buildQueryString()`); `renderStudentsTable()`/`renderPagination()`; `wireStudentsToolbar()` (debounced search via `debounce()` + group filter); `loadGroupAndCourseOptions()` (populates the filter dropdown and, via `studentForm.js`, the form's group/course inputs); `wireDeleteModal()`/`openDeleteConfirm()` (delete flow via `Laravel.students.destroy(id)`).
+- Important notes: Listens for a `"students:changed"` custom event (dispatched by `studentForm.js` on successful save) to refresh the list. Built without the real `config.js`/`utils.js` available — see the three flagged assumptions under `config.js` and `utils.js` above, and Known Issues #8. Not yet tested with Playwright or a live backend (Known Issues #10).
+
+**`studentForm.js`** *(built this session)*
+- Purpose: Add/Edit Student modal — field rendering (differs by mode), face-image picker + validation, group/course inputs, submit handling.
+- Main functionality: `openStudentModal(mode, student)`; `renderStudentFormFields()` (create mode shows `first_name`/`last_name`/`student_code`/`national_id` as required inputs; edit mode shows those three as a read-only banner instead, since `UpdateStudentRequest` doesn't accept changes to them — matches the spec exactly, not an oversight); `populateStudentFormGroupSelect()`/`populateStudentFormCourseList()`; `wireFaceImagePicker()` (calls the new `validateFaceImage(file, maxSizeMB)` signature — 10 on create, 4 on edit); `buildStudentFormData()`/`validateStudentForm()`; `prefillStudentForm()` (edit mode). Also defines `escapeHtml()`, used globally by both this file and `students.js` (loads first, so it's available either way).
+- Important notes: **`prefillStudentForm()`'s group/course pre-fill is a name-matching heuristic**, not an ID lookup — `StudentResource` only returns `group_name`/`course_name` strings, never `group_id`/`course_ids`, so there's no documented way to know which group/courses are actually selected when editing. Matches against the loaded groups/courses lists by name as a stopgap. Flagged in Known Issues #9 — replace with real ID-based logic once a live `GET /students/{id}` response is seen.
 
 ### CSS — base (`assets/css/base/`)
 
@@ -284,7 +299,7 @@ ul, ol { list-style: none; padding: 0; }
     --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
 }
 ```
-- Important notes: An alternative palette (indigo + **amber** accent + IBM Plex Sans body, instead of cyan + Inter) was proposed by Claude but never adopted — the user asked to see both, then moved on without picking, so the pre-existing cyan/indigo/Inter direction was kept by default. If visual rework is ever requested, this is the file to change, and all components reference these variables rather than hardcoded colors, so a palette swap is low-risk.
+- Important notes: An alternative palette (indigo + **amber** accent + IBM Plex Sans body, instead of cyan + Inter) was proposed by Claude but never adopted — the user asked to see both, then moved on without picking, so the pre-existing cyan/indigo/Inter direction was kept by default. If visual rework is ever requested, this is the file to change, and all components reference these variables rather than hardcoded colors, so a palette swap is low-risk. All five new files built this session (`tables.css`, `pagination.css`, `modals.css`, `badges.css`, `students.css`) reference only these existing tokens — no new variables were introduced.
 
 **`typography.css`**
 - Purpose: Font loading + base type styles.
@@ -300,7 +315,15 @@ ul, ol { list-style: none; padding: 0; }
 
 **`loader.css`** — `#global-loader` (fixed full-screen overlay, blurred backdrop), `.loader-visible`, `.loader-spinner` (CSS-only spin animation).
 
-### CSS — layout (`assets/css/layout/`) — new this module
+**`tables.css`** *(built this session)* — `.table-wrapper`/`.table` (generic data table: header, rows, hover state via `--primary-soft`), `.table-action-btn` (icon buttons in the trailing actions column, `.table-action-danger` variant), `.table-empty` (empty state with icon/title/hint), reduced cell padding under 600px. Written to be reusable as-is for Courses/Groups/Sessions/Reports/Users later, not Students-specific.
+
+**`pagination.css`** *(built this session)* — `.pagination`/`.pagination-controls`/`.pagination-btn` (+ `.pagination-btn-active`, `:disabled`), `.pagination-ellipsis`, stacks vertically under 600px.
+
+**`modals.css`** *(built this session)* — Styles the `.modal`/`.modal-overlay`/`.modal-box` + `data-modal-close`/`modal-open` convention already documented in `ui.js` — **the Students module is the first to actually use it.** Adds the internal structure classes `.modal-header`/`.modal-title`/`.modal-close`/`.modal-body`/`.modal-footer`, plus `.modal-box-sm`/`.modal-box-lg` size variants. Transition respects `prefers-reduced-motion` via the global override already in `reset.css`.
+
+**`badges.css`** *(built this session)* — `.badge` base + `.badge-success`/`.badge-warning`/`.badge-danger`/`.badge-info`/`.badge-accent`/`.badge-neutral`. Also defines `.badge-present`/`.badge-late`/`.badge-absent` now (unused until the Attendance/Live Session modules) so that naming convention is established once rather than reinvented later, per the original plan's note that badges would be reused for attendance status. `.badge-chip-list` wraps a row of tag badges — used for a student's group/course tags.
+
+### CSS — layout (`assets/css/layout/`)
 
 **`layout.css`** — `.app-shell` (flex container), `#sidebar` (fixed, 260px, gradient background using `--primary`→`--primary-dark`), `.app-main` (margin-left offset to clear the fixed sidebar), `#navbar` (sticky top), `.app-content` (padding). At `max-width: 900px`, the sidebar becomes an off-canvas drawer (`transform: translateX(-100%)`, shown via `body.sidebar-open`), with a dimmed `::before` backdrop.
 
@@ -313,11 +336,15 @@ ul, ol { list-style: none; padding: 0; }
 
 **`login.css`** — `.login-page` (2-column grid, split screen), `.login-brand` (gradient panel), `.login-logo`/`.login-logo-mark`, `.login-scan-frame` (corner-bracket pseudo-element motif — the signature design element), `.login-scan-line` (animated sweep, respects `prefers-reduced-motion`), `.login-form-panel`/`.login-form-card`, `.login-form-error` box. Responsive: at `max-width: 860px` collapses to a single column, hides the tagline, shrinks the scan-frame insets.
 
+**`students.css`** *(built this session)* — `.students-page-header`/`.students-toolbar`/`.students-search-wrap` (page layout), `.student-name-cell`/`.student-avatar`/`.student-avatar-fallback` (table identity cell), `.student-form-grid` + `.student-form-readonly-banner` (modal form layout, including the edit-mode read-only name/code banner), `.face-image-picker`/`.face-image-preview`, `.course-checkbox-list`/`.course-checkbox-item` (the `course_ids[]` picker). Responsive: form grid collapses to 1 column under 720px, toolbar stacks under 600px.
+
 ### HTML pages (project root)
 
 **`login.html`** — Links: `reset.css`, `variables.css`, `typography.css`, `buttons.css`, `forms.css`, `toast.css`, `loader.css`, `login.css`. Body: `.login-page` with brand panel (scan-frame + scan-line + logo + heading + tagline) and form panel (email + password-with-toggle + submit + inline error box). Loads all 7 core scripts in dependency order, then `login.js`. **Fully tested** via Playwright: desktop, mobile, empty-form validation errors, and a real failed-login network-error case.
 
 **`dashboard.html`** — ⚠️ **Placeholder only**, built solely to host and test the Sidebar+Navbar shell module — **not** the real Dashboard module deliverable. Links: `reset.css`, `variables.css`, `typography.css`, `layout.css`, `sidebar.css`, `navbar.css`, `buttons.css`, `toast.css`, `loader.css`. Body: `.app-shell` > `#sidebar` + `.app-main` (`#navbar` + `.app-content` with a single placeholder paragraph). Inline script: `guardPage(); renderAppShell({ activeKey: "dashboard", pageTitle: "Dashboard" });`. **Tested** via Playwright for both admin and instructor roles, plus mobile drawer open/close — this is where the navbar-icon bug was caught.
+
+**`students.html`** *(built this session)* — ⚠️ Built purely from this context document — the real existing CSS/JS files weren't available, so this was written from documented class names/function signatures/markup conventions rather than against the live codebase. Links all base/layout/component CSS plus the four new component files and `students.css`. Body: page header (title + Add Student button), search + group-filter toolbar, table + empty state, pagination container, plus two modals using the documented modal convention — `#student-modal` (add/edit form) and `#delete-student-modal` (delete-confirm). Loads all 7 core scripts, then `sidebar.js`/`navbar.js`, then `studentForm.js` before `students.js` (dependency order — `students.js` calls functions `studentForm.js` defines), then `guardPage(["admin"]); renderAppShell(...); initStudentsPage();` inline. **Not yet tested** — needs a Playwright pass against a live or mocked backend (Known Issues #10) before being considered done.
 
 ---
 
@@ -333,7 +360,7 @@ Only endpoints currently wired into `config.js`, plus the newly-researched Stude
 | POST | `/logout` | — (Bearer token) | `{ message }` (assumed) | `auth.js` → `logout()` |
 | GET | `/me` | — (Bearer token) | Same shape as login's `user`+`role` | `auth.js` → `refreshCurrentUser()` |
 
-### Students (researched this session — not yet consumed by any page)
+### Students (researched this session — now consumed by `students.js`/`studentForm.js`)
 
 | Method | URL | Request | Response |
 |---|---|---|---|
@@ -342,7 +369,7 @@ Only endpoints currently wired into `config.js`, plus the newly-researched Stude
 | GET | `/students/{id}` | — | `{ status, data: StudentResource }` |
 | POST | `/students/{id}` | `multipart/form-data` — `UpdateStudentRequest` (operationId `student.update_3` — **this is the one mapped to `Laravel.students.updateWithImage(id)`, use this for ALL edits**) | `{ status, message: "تم تعديل الطالب بنجاح", data: StudentResource }` |
 | ~~PUT~~ | ~~`/students/{id}`~~ | ~~`UpdateStudentRequest`~~ | **Excluded from `config.js` by user decision — do not use.** |
-| DELETE | `/students/{id}` | — | (assumed `{status, message}`, not yet re-verified) |
+| DELETE | `/students/{id}` | — | (assumed `{status, message}`, not yet re-verified) — `students.js` calls this as `Laravel.students.destroy(id)`, **assumed but not confirmed to exist in `config.js`** (Known Issues #8). |
 
 **`StudentResource`** (response shape):
 ```json
@@ -361,6 +388,7 @@ Only endpoints currently wired into `config.js`, plus the newly-researched Stude
   ]
 }
 ```
+⚠️ **Note added this session:** this shape has no `group_id` or `course_ids` — only name strings. `studentForm.js`'s edit-mode pre-fill currently matches by name as a stopgap (Known Issues #9); double-check whether the real response actually includes IDs that this excerpt simply didn't show.
 
 **`StoreStudentRequest`** (POST `/students` body — multipart):
 ```
@@ -369,7 +397,7 @@ last_name       string, required, max 255
 student_code    string, required, max 255
 email           string, required, email format, max 255
 phone_number    string, optional, max 20
-gender          string, required, enum: "male" | "female"
+gender           string, required, enum: "male" | "female"
 national_id     string, required, max 50
 face_image      binary, required, maxLength 10240 (≈10MB — matches validators.js FACE_IMAGE_RULES)
 group_id        integer, required
@@ -384,11 +412,11 @@ gender          string|null, optional, enum: "male" | "female"
 national_id     string|null, optional
 registered_at   string|null, optional, date-time
 group_id        integer|null, optional
-face_image      binary|null, optional, maxLength 4096 (≈4MB — ⚠️ DIFFERENT from create's 10MB, see Known Issues #3)
+face_image      binary|null, optional, maxLength 4096 (≈4MB — ⚠️ DIFFERENT from create's 10MB, see Known Issues #3 — RESOLVED IN DESIGN this session)
 course_ids      integer[], optional, minItems 1
 ```
 
-### Courses (not yet consumed by any page — needed for the Students form's course multi-select and the future Courses module)
+### Courses (consumed by `studentForm.js`'s course checkbox list this session)
 
 | Method | URL | Response |
 |---|---|---|
@@ -407,12 +435,15 @@ course_ids      integer[], optional, minItems 1
   "updated_at": "string|null (date-time)"
 }
 ```
+⚠️ `students.js`/`studentForm.js` call this as `Laravel.courses.index`, **assumed but not confirmed to exist in `config.js`** (Known Issues #8).
 
-### Groups (not yet consumed by any page — needed for the Students form's group select)
+### Groups (consumed by `students.js`'s filter dropdown + `studentForm.js`'s group select this session)
 
 | Method | URL | Response |
 |---|---|---|
 | GET | `/groups` | `{ success: bool, data: [{id, group_name, group_code, academic_year, course_id, course_name}] }` |
+
+⚠️ `students.js`/`studentForm.js` call this as `Laravel.groups.index`, **assumed but not confirmed to exist in `config.js`** (Known Issues #8).
 
 ### Python AI service
 
@@ -434,7 +465,8 @@ course_ids      integer[], optional, minItems 1
 - **`ui.js` — `showToast`, `openModal`/`closeModal`, `showLoader`/`hideLoader`**: the only sanctioned way to show notifications/modals/loading state. No page should build its own toast or modal logic.
 - **`validators.js` — `validateForm(values, rules)`**: generic validator every form should use rather than hand-rolling field checks.
 - **`sidebar.js` / `navbar.js` — `renderAppShell({activeKey, pageTitle})`**: every protected page calls this once, after `guardPage()`, to render its own copy of the shared shell (each page has its own `#sidebar`/`#navbar` containers in its HTML; nothing is shared across page loads since this is a multi-page app, not an SPA).
-- **Planned, not yet built:** `table.js` (generic table row renderer), `pagination.js` (page-number UI + click handling), `searchFilter.js` (generic search input + filter dropdown wiring) — needed imminently for the Students list.
+- **`students.js` / `studentForm.js`** *(new this session)*: `students.js` exposes `initStudentsPage()` as the page's single entry point; `studentForm.js` exposes `openStudentModal(mode, student)` as the function any future code (or `students.js`) should call to open the add/edit modal, plus `populateStudentFormGroupSelect()`/`populateStudentFormCourseList()` for filling its dropdowns from outside.
+- **Not built** — `table.js` (generic table row renderer), `pagination.js` (page-number UI + click handling), `searchFilter.js` (generic search input + filter dropdown wiring): the original plan called for these, but the Students module built equivalent logic directly into `students.js`/`studentForm.js` instead (see Important Decisions #15). Extract them into shared components later only if a second module needs near-identical UI.
 
 ---
 
@@ -442,7 +474,7 @@ course_ids      integer[], optional, minItems 1
 
 - **Token storage:** `localStorage` key `attendu_token`, written/read via `storage.js`'s `setToken()`/`getToken()`.
 - **User storage:** `localStorage` key `attendu_user`, holds the merged `{ ...user, role }` object, via `setUser()`/`getUser()`.
-- **Route protection:** Every protected page calls `guardPage(allowedRoles)` at the top of its bottom-of-body inline script. No token → redirect to `login.html`. Token present but role not in `allowedRoles` → redirect to `dashboard.html`. Calling `guardPage()` with no arguments allows any logged-in role through.
+- **Route protection:** Every protected page calls `guardPage(allowedRoles)` at the top of its bottom-of-body inline script. No token → redirect to `login.html`. Token present but role not in `allowedRoles` → redirect to `dashboard.html`. Calling `guardPage()` with no arguments allows any logged-in role through. `students.html` calls `guardPage(["admin"])`.
 - **User roles:** Exactly two — `"admin"` and `"instructor"` (string values, lowercase, as returned by the Laravel API's `role` field).
 - **Authentication flow:**
   1. User submits `login.html` form → `login(email, password)` in `auth.js`.
@@ -459,13 +491,13 @@ course_ids      integer[], optional, minItems 1
 - **Indentation:** 4 spaces, consistently, across all JS and CSS files.
 - **Quotes:** Double quotes in JavaScript strings.
 - **Functions:** `async`/`await` throughout — no `.then()` chains anywhere in the codebase.
-- **Naming:** camelCase for functions/variables; SCREAMING_SNAKE_CASE for constant config objects/maps (`SIDEBAR_ICONS`, `FACE_IMAGE_RULES`, `STORAGE_KEYS`).
+- **Naming:** camelCase for functions/variables; SCREAMING_SNAKE_CASE for constant config objects/maps (`SIDEBAR_ICONS`, `FACE_IMAGE_RULES`, `STORAGE_KEYS`, `STUDENTS_PAGE_STATE`, `STUDENT_FORM_STATE`).
 - **Comments:** Every core/component file opens with a banner comment (`// ====...`) stating the file's purpose. Every exported function has a JSDoc block (`@param`/`@returns`) above it.
 - **Error convention:** Every thrown error object in `api.js` has `name: "APIError"` — this is load-bearing, not decorative; `auth.js`/page code can rely on checking `err.name` or just reading `err.message`/`err.status` directly.
 - **CSS:** All colors/spacing/fonts/radii/shadows reference `variables.css` custom properties — never hardcode a hex color or pixel value that already has a token. Class naming is flat/component-scoped (`.sidebar-link`, `.navbar-toggle`, `.login-form-card`) rather than strict BEM, but always prefixed by the component/page it belongs to.
 - **Endpoint path builders:** In `config.js`, any endpoint needing a URL parameter is an arrow function (`show: (id) => \`/students/${id}\``); static endpoints are plain strings.
-- **No inline `<style>` or `<script>` logic beyond the minimal bottom-of-body shell-init block** (`guardPage(...)`, `renderAppShell(...)`) — everything else lives in its own `.js`/`.css` file.
-- **Testing discipline:** Every interactive page built so far has been verified with headless Chromium (Playwright) screenshots and live DOM interaction (clicks, form fills, bounding-box checks) before being handed off — not just written and assumed correct. This caught two real bugs (the `api.js` error-swallowing bug, the navbar icon 0×0 bug). **Continue this practice for every future module.**
+- **No inline `<style>` or `<script>` logic beyond the minimal bottom-of-body shell-init block** (`guardPage(...)`, `renderAppShell(...)`) — everything else lives in its own `.js`/`.css` file. `students.html` adds one extra call (`initStudentsPage()`) to this block — a calculated, minimal exception, not a pattern to repeat without thought; all real logic still lives in `students.js`.
+- **Testing discipline:** Every interactive page built so far has been verified with headless Chromium (Playwright) screenshots and live DOM interaction (clicks, form fills, bounding-box checks) before being handed off — not just written and assumed correct. This caught two real bugs (the `api.js` error-swallowing bug, the navbar icon 0×0 bug). **Continue this practice for every future module.** ⚠️ **The Students files built this session are the first exception to this rule** — they were written without access to the real codebase or a live backend, so they have not been through this verification step yet (see Known Issues #10).
 
 ---
 
@@ -478,14 +510,14 @@ course_ids      integer[], optional, minItems 1
 - **App shell layout:** Fixed 260px sidebar (gradient `--primary`→`--primary-dark`) + sticky top navbar + scrollable content area. Below 900px the sidebar becomes an off-canvas drawer with a dimmed backdrop, toggled by a navbar hamburger button.
 - **Sidebar active state:** Uses `--accent` (cyan) as a solid background on the active link — this is the only place cyan appears as a large filled area rather than a thin accent line.
 - **Toast convention:** Top-right stacking, left-border-colored by type (`success`/`error`/`warning`/`info`), click-to-dismiss or auto-dismiss after a configurable duration.
-- **Modal convention (documented in `ui.js`, not yet used by any page):**
+- **Modal convention** — now actually implemented in `modals.css` (built this session):
   ```html
   <div id="some-modal" class="modal">
     <div class="modal-overlay" data-modal-close></div>
     <div class="modal-box"> ...content... </div>
   </div>
   ```
-  `openModal("some-modal")`/`closeModal("some-modal")` toggle a `.modal-open` class; any element with `data-modal-close` (overlay, a Cancel button, an "✕" button) closes it automatically; Escape also closes it. **`modals.css` styling these classes does not exist yet** — needed for the Students add/edit modal.
+  `openModal("some-modal")`/`closeModal("some-modal")` toggle a `.modal-open` class; any element with `data-modal-close` (overlay, a Cancel button, an "✕" button) closes it automatically; Escape also closes it. The Students module's `#student-modal` and `#delete-student-modal` are the first real usage of this convention, and add the internal structure classes `.modal-header`/`.modal-title`/`.modal-close`/`.modal-body`/`.modal-footer` plus `.modal-box-sm`/`.modal-box-lg` size variants.
 - **RTL handling:** A `.rtl` utility class (`direction:rtl; text-align:right;`) exists for wrapping blocks of Arabic content (e.g. a student's Arabic name + details) where the whole block should flow right-to-left, separate from the automatic per-character font fallback which handles inline Arabic words mixed into otherwise-LTR text.
 
 ---
@@ -504,7 +536,11 @@ course_ids      integer[], optional, minItems 1
 10. **Signature login design element:** the scan-frame/scan-line corner-bracket motif was chosen specifically to tie into the product's face-recognition identity without literally rendering a face (avoiding AI-generated realistic faces entirely).
 11. **Sidebar role-based menus:** Admin gets all 9 module links; Instructor gets only Dashboard + Sessions — based on an explicit early-conversation ranking decision ("Instructor → sees only Sessions"), re-confirmed (not re-litigated) when building the actual sidebar component.
 12. **`dashboard.html` built early is explicitly a test harness for the Sidebar+Navbar module, not the real Dashboard deliverable.** Its content area is a one-line placeholder; the real stat-cards implementation is module #12 in the build order and has not been started.
-13. **Mandatory visual/functional testing before handoff:** every page built so far was verified with headless Chromium screenshots and live DOM interaction, not just written and assumed correct. This is now an established practice, not a one-off — continue it.
+13. **Mandatory visual/functional testing before handoff:** every page built so far was verified with headless Chromium screenshots and live DOM interaction, not just written and assumed correct. This is now an established practice, not a one-off — continue it. *(Exception this session — see Important Decisions #17.)*
+14. **Known Issue #3 (face-image size) resolved via an optional parameter, not a second rule set:** `validateFaceImage(file, maxSizeMB = FACE_IMAGE_RULES.maxSizeMB)`, with call sites passing `10` on create and `4` on edit. Chosen over duplicating `FACE_IMAGE_RULES` because it's a smaller diff and keeps the single source of truth for the default. The actual edit to `validators.js` is still pending — see Known Issues #11.
+15. **`table.js`/`pagination.js`/`searchFilter.js` were not extracted as separate components for the Students module** — their planned responsibilities were built directly into `students.js`/`studentForm.js` instead, since this was the first module to need them and there was nothing yet to share. Revisit extracting them into `assets/js/components/` only if Courses, Groups, or Sessions need near-identical table/pagination/search UI and copy-pasting the logic becomes a real maintenance problem.
+16. **Edit-form group/course pre-fill uses name-matching, not ID-matching, as a stopgap.** `StudentResource` (per the documented spec excerpt) only returns `group_name`/`course_name` strings, never `group_id`/`course_ids`, so `studentForm.js`'s `prefillStudentForm()` matches the student's group/course **names** against the loaded groups/courses lists to guess which checkboxes/select option should be pre-selected. This is fragile (breaks on duplicate names) and explicitly flagged to replace once a real `GET /students/{id}` response confirms whether IDs are actually present (see Known Issues #9).
+17. **This session's Students-module work was built without access to the real project files.** Only `PROJECT_CONTEXT.md` was uploaded — `config.js`, `ui.js`, `validators.js`, the existing CSS files, `Laravel.json`, etc. were not available. The five new CSS files, `students.html`, `students.js`, and `studentForm.js` were written to match this document's class names, function signatures, JSON shapes, and coding standards as closely as possible, and were syntax-checked (`node --check` on the JS, brace-balance check on the CSS), but **none of it has been run in a browser or against the real codebase.** Treat these files as "ready to integrate and verify," not "tested" — this is a deliberate, flagged exception to Important Decision #13's testing discipline, not a quiet lapse in it.
 
 ---
 
@@ -512,11 +548,15 @@ course_ids      integer[], optional, minItems 1
 
 1. **🔴 Unconfirmed: Python API key delivery mechanism.** `pythonRequest()` sends the key as an `X-API-Key` header; the WebSocket helper (`buildPythonWsUrl`) sends it as an `api_key` query parameter. Nobody has confirmed against the actual Python server source which mechanism (or both) it actually expects. If wrong, every Python REST call will silently fail authentication. **Must be resolved before building the Live Session module.**
 2. **🔴 Unconfirmed: real Python service base URL.** `Python.json` has no `servers` field. `PYTHON_CONFIG.BASE_URL` (`http://127.0.0.1:8000`) and `WS_BASE_URL` (`ws://127.0.0.1:8000`) are placeholders, not confirmed deployment values.
-3. **🟡 Face-image max-size discrepancy between create and update.** `StoreStudentRequest.face_image` allows up to `maxLength: 10240` (≈10MB, matches `validators.js`'s current `FACE_IMAGE_RULES.maxSizeMB: 10`), but `UpdateStudentRequest.face_image` only allows `maxLength: 4096` (≈4MB). `validators.js` currently has only one shared rule set — **this needs to be resolved (either two rule sets, or a parameter to `validateFaceImage()`) before `studentForm.js` is built**, or users will be able to select 5-9MB images on the edit form that the backend will reject.
-4. **🟡 No live backend has been used for any testing so far.** Every test of API-dependent flows has only verified the network-error path (server unreachable) and structural/visual correctness — never against a real running Laravel or Python server. Real integration testing is still entirely pending.
-5. **🟡 `dashboard.html`'s sidebar links to pages that don't exist yet** (`students.html`, `courses.html`, etc. all 404 right now) — expected at this stage, not a regression, just worth knowing before clicking around the current build.
-6. **🟡 Missing component CSS needed imminently:** `tables.css`, `pagination.css`, `modals.css`, `badges.css` do not exist yet, and the Students module (next up) needs all four.
-7. **🟢 Minor:** `DELETE /students/{id}` response shape was not explicitly re-verified during this session's research pass (assumed `{status, message}` by pattern-matching other delete endpoints) — worth a quick double-check against `Laravel.json` when `students.js`'s delete handler is actually written.
+3. **🟢 Resolved in design, not yet applied to the real file: face-image max-size discrepancy.** `StoreStudentRequest.face_image` allows up to 10MB, `UpdateStudentRequest.face_image` only allows 4MB. Decision: `validateFaceImage(file, maxSizeMB = FACE_IMAGE_RULES.maxSizeMB)` — an optional override instead of a second rule set. `studentForm.js` already calls the new signature (`10` on create, `4` on edit), but **the one-line edit to the real `validators.js` hasn't been applied yet**, since the file wasn't available this session. This is the single most direct blocker to the Students form actually working — apply it first.
+4. **🟡 No live backend has been used for any testing so far.** Every test of API-dependent flows has only verified the network-error path (server unreachable) and structural/visual correctness — never against a real running Laravel or Python server. Real integration testing is still entirely pending, and now includes the new Students files too.
+5. **🟡 `dashboard.html`'s sidebar links to pages that don't exist yet.** `courses.html`, `groups.html`, `sessions.html`, etc. still all 404. `students.html` now exists (built this session) but hasn't been confirmed reachable/working from the sidebar link in a real browser.
+6. **🟢 Resolved this session: component CSS that was previously missing.** `tables.css`, `pagination.css`, `modals.css`, `badges.css` all now exist. They haven't been visually verified in a browser yet, though (see Known Issues #10).
+7. **🟢 Minor, still open:** `DELETE /students/{id}` response shape was not explicitly re-verified against `Laravel.json` this session either (still assumed `{status, message}` by pattern-matching other delete endpoints) — `students.js`'s delete handler reads `res.message` defensively (falls back to a generic toast if absent), but worth a real check against the spec.
+8. **🟡 New this session — three assumed `config.js` endpoints, unconfirmed.** `students.js`/`studentForm.js` call `Laravel.groups.index`, `Laravel.courses.index`, and `Laravel.students.destroy(id)`, assuming they exist in `config.js` following its established naming/builder conventions. None of these were confirmed present in the actual file (which wasn't available this session) — verify and add them if missing, or the group filter, course picker, and delete flow will throw on load/use.
+9. **🟡 New this session — `StudentResource` has no `group_id`/`course_ids`, only name strings.** This blocks a reliable edit-form pre-fill. `studentForm.js`'s `prefillStudentForm()` currently guesses the right group/courses by matching `group_name`/`course_name` against the loaded lists (Important Decisions #16) — fragile, and should be replaced with real ID-based matching once a live API response is available (or once `Laravel.json` is re-checked for fields this excerpt may have omitted).
+10. **🟡 New this session — the Students module's new files have not been Playwright-tested or run against a live backend.** `students.html`/`students.js`/`studentForm.js` and the five new CSS files were built from this context document alone (Important Decisions #17) and have only been syntax/brace-checked, not rendered. This is a deliberate, flagged gap in the project's normal testing discipline (Important Decisions #13) — close it before marking the Students module done.
+11. **🟡 New this session — `validators.js` patch specified but not applied.** The fix for Known Issue #3 (optional `maxSizeMB` parameter on `validateFaceImage`) is fully specified but hasn't been written into the real file, since it wasn't available this session. `studentForm.js` already assumes the new signature exists — until the patch is applied, face-image validation in the edit form will use the wrong size limit (whatever the current single-value `FACE_IMAGE_RULES.maxSizeMB` is, ignoring the `4` argument `studentForm.js` passes).
 
 ---
 
@@ -524,17 +564,22 @@ course_ids      integer[], optional, minItems 1
 
 Prioritized — top of list is the very next thing to do.
 
-- [ ] **Students module:**
-  - [ ] Decide how to handle the face-image 4MB-vs-10MB discrepancy in `validators.js` (Known Issue #3)
-  - [ ] Create `assets/css/components/tables.css`
-  - [ ] Create `assets/css/components/pagination.css`
-  - [ ] Create `assets/css/components/modals.css` (must match the `[data-modal-close]`/`.modal-open` convention already documented in `ui.js`)
-  - [ ] Create `assets/css/components/badges.css` (will also be reused later for attendance status badges: present/late/absent)
-  - [ ] Create `assets/css/pages/students.css`
-  - [ ] Create `students.html` (search bar, group-filter dropdown, table, pagination, "Add Student" button, per-row edit/delete actions)
-  - [ ] Create `students.js` (load list via `Laravel.students.index` with query params built via `buildQueryString()`, debounced search via `debounce()`, render rows, wire pagination, delete-confirm flow)
-  - [ ] Create `studentForm.js` (add/edit modal: fields per `StoreStudentRequest`/`UpdateStudentRequest`, face-image picker with preview + `validateFaceImage()`, group `<select>`, multi-select for `course_ids[]`, submit via `FormData` to `Laravel.students.store` or `Laravel.students.updateWithImage`)
-  - [ ] Test the full create/edit/delete flow with Playwright (validation states, image preview, error states) before considering the module done
+- [x] **Students module — design/build phase:**
+  - [x] Decide how to handle the face-image 4MB-vs-10MB discrepancy in `validators.js` (Known Issue #3) — decided, not yet applied to the real file (see below)
+  - [x] Create `assets/css/components/tables.css`
+  - [x] Create `assets/css/components/pagination.css`
+  - [x] Create `assets/css/components/modals.css` (matches the `[data-modal-close]`/`.modal-open` convention already documented in `ui.js`)
+  - [x] Create `assets/css/components/badges.css` (also defines the present/late/absent variants for later reuse)
+  - [x] Create `assets/css/pages/students.css`
+  - [x] Create `students.html` (search bar, group-filter dropdown, table, pagination, "Add Student" button, per-row edit/delete actions)
+  - [x] Create `students.js` (load list via `Laravel.students.index` with query params built via `buildQueryString()`, debounced search via `debounce()`, render rows, wire pagination, delete-confirm flow)
+  - [x] Create `studentForm.js` (add/edit modal: fields per `StoreStudentRequest`/`UpdateStudentRequest`, face-image picker with preview + `validateFaceImage()`, group `<select>`, course checkbox list for `course_ids[]`, submit via `FormData` to `Laravel.students.store` or `Laravel.students.updateWithImage`)
+- [ ] **Students module — integration/verification phase (next up):**
+  - [ ] Apply the `validators.js` patch — add the `maxSizeMB` parameter to `validateFaceImage()` (Known Issues #3, #11)
+  - [ ] Verify (or add) `Laravel.groups.index`, `Laravel.courses.index`, and `Laravel.students.destroy(id)` in the real `config.js` (Known Issue #8)
+  - [ ] Re-check the real `GET /students/{id}` response (or `Laravel.json`) for whether `group_id`/`course_ids` are actually present, and replace the name-matching heuristic in `studentForm.js`'s `prefillStudentForm()` if so (Known Issue #9)
+  - [ ] Double-check `buildQueryString()`'s actual return format (leading `?` or not) against `students.js`'s usage
+  - [ ] Test the full create/edit/delete flow with Playwright (validation states, image preview, error states) against a live or mocked backend before considering the module done
 - [ ] **Courses module** (`courses.html`/`courses.js`) — simple CRUD
 - [ ] **Groups module** (`groups.html`/`groups.js`) — simple CRUD, needs Courses' `GET /courses` for its course dropdown
 - [ ] **Sessions module** (`sessions.html`/`sessions.js`/`sessionForm.js`) — needs Courses, Groups, and Users(instructors) to exist first
@@ -550,10 +595,14 @@ Prioritized — top of list is the very next thing to do.
 
 # Next Recommended Task
 
-Resolve the face-image size-limit question (Known Issue #3) first since it's a 2-minute decision that blocks clean form-validation code, then build the four missing component CSS files (`tables.css`, `pagination.css`, `modals.css`, `badges.css`) since the Students list and form pages cannot be built without them. After that: `students.html` + `students.js` for the list view, tested with Playwright (including an empty-state and a populated-state screenshot), then `studentForm.js` for create/edit. Use the exact `StoreStudentRequest`/`UpdateStudentRequest`/`StudentResource` shapes documented in the API Integration section above — they've already been verified against the real `Laravel.json` spec, no need to re-derive them.
+Apply the `validators.js` patch (the `maxSizeMB` parameter on `validateFaceImage()`), then verify the three assumed `config.js` endpoints (`Laravel.groups.index`, `Laravel.courses.index`, `Laravel.students.destroy(id)`) actually exist — add them if not, following the existing builder-function convention for parameterized endpoints. Then re-check whether `GET /students/{id}` really omits `group_id`/`course_ids` (it would be worth a quick look at the actual `Laravel.json` rather than just this document's excerpt), since that decides whether `studentForm.js`'s edit pre-fill heuristic needs replacing before testing even makes sense. Only after those three things should the Students module go through the project's normal Playwright pass (empty-state and populated-state screenshots, create/edit/delete flows, validation states) — at that point it can be marked done and Courses & Groups can start.
 
 ---
 
 # Handover Summary
 
-AttendU is a vanilla HTML/CSS/JS multi-page frontend for a university face-recognition attendance system, talking to a Laravel REST API and a separate Python AI service. Three of twelve planned modules are fully built, tested with real headless-browser screenshots, and verified bug-free as of this writing: **Core Infrastructure** (7 shared JS files: config/storage/api/auth/ui/utils/validators — including one critical bug fix in error handling), **Login** (full page, split-screen design with a scan-frame motif, tested including the network-error path), and **Sidebar+Navbar** (the shared app shell every future page will use, role-aware for admin vs instructor, tested on both roles and mobile, including a fixed icon-sizing bug). The **Students module** is next and currently ~10% done — only API research is complete (exact Laravel request/response shapes for students/courses/groups, all documented above); no Students-specific files exist yet. Four component CSS files (tables, pagination, modals, badges) are needed before that module can proceed and don't exist yet. A face-image size-limit inconsistency between the create and update endpoints (10MB vs 4MB) was just discovered and needs a decision before the student form's validation logic is written. Two open questions block the future Live Session module specifically (Python API-key delivery mechanism, and the real Python service base URL) but do not block Students, Courses, Groups, or Sessions. A full separate reference document for the Live Session module's WebSocket/sync flow already exists (`AttendU_LiveSession_Reference.md`) and should be consulted when that module is reached, rather than re-deriving it from the original PDF. Every file in this project follows strict conventions documented in Coding Standards above (4-space indent, async/await only, `name:"APIError"` error convention, CSS variables only, JSDoc on every function) — any new code should match them exactly rather than introducing a new style. The single most important practice to continue: **test every interactive page with a real headless-browser render before considering it done** — this has already caught two genuine bugs that pure code review missed.
+AttendU is a vanilla HTML/CSS/JS multi-page frontend for a university face-recognition attendance system, talking to a Laravel REST API and a separate Python AI service. Three of twelve planned modules are fully built, tested with real headless-browser screenshots, and verified bug-free: **Core Infrastructure** (7 shared JS files, including one critical bug fix in error handling), **Login** (full page, tested including the network-error path), and **Sidebar+Navbar** (the shared app shell, role-aware, tested on both roles and mobile, including a fixed icon-sizing bug).
+
+The **Students module** (4th in the build order) moved from ~10% (API research only) to ~55% this session: all originally-planned files now exist — `tables.css`, `pagination.css`, `modals.css`, `badges.css`, `students.css`, `students.html`, `students.js`, and `studentForm.js` — covering the list view (search, group filter, pagination, table) and the add/edit modal (face-image picker with the 10MB/4MB limits resolved, group select, course checkbox list, create-vs-edit field differences matching the documented `StoreStudentRequest`/`UpdateStudentRequest` shapes exactly, including that edit mode can't change name/student-code per the spec).
+
+**The critical thing for whoever picks this up next:** this session only had `PROJECT_CONTEXT.md` available — none of the real project files (`config.js`, `ui.js`, `validators.js`, the existing CSS, `Laravel.json`) were uploaded. Everything built this session is therefore a spec-faithful reconstruction, syntax-checked but **never run in a browser or against a live backend**. Before trusting this module, do three things in order: (1) apply the one-line `validators.js` patch described in Known Issues #11, (2) confirm `config.js` actually has `Laravel.groups.index`, `Laravel.courses.index`, and `Laravel.students.destroy(id)` (Known Issues #8), and (3) run the project's normal Playwright pass against a live or mocked backend, paying special attention to the group/course edit-prefill heuristic in `studentForm.js` (Known Issues #9) since it's the most likely thing to break against real data. Two unrelated open questions (Python API-key delivery mechanism, real Python service base URL) still block only the future Live Session module, not Students/Courses/Groups/Sessions. The full Live Session reference doc (`AttendU_LiveSession_Reference.md`) is still waiting, untouched, for when that module is reached. Every file in this project — including everything new this session — follows the conventions in Coding Standards (4-space indent, async/await only, `name:"APIError"` error convention, CSS variables only, JSDoc on every function): any new code should keep matching them rather than introducing a new style.
