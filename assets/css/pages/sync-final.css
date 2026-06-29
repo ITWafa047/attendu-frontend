@@ -1,0 +1,115 @@
+/* =====================================================================
+   pages/sync-final.css
+   Styles for the post-session review page.
+   ===================================================================== */
+
+.sync-final-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+.sync-final-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.sync-final-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-4);
+}
+
+.sync-final-summary .stat-card {
+    background: var(--surface);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    border-left: 4px solid var(--border);
+}
+
+.sync-final-summary .stat-card .stat-number {
+    font-size: 1.8rem;
+    font-weight: 600;
+    display: block;
+}
+
+.sync-final-summary .stat-card .stat-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.sync-final-summary .stat-card.present { border-left-color: var(--success); }
+.sync-final-summary .stat-card.late { border-left-color: var(--warning); }
+.sync-final-summary .stat-card.absent { border-left-color: var(--danger); }
+.sync-final-summary .stat-card.total { border-left-color: var(--muted); }
+
+.sync-final-session-info {
+    background: var(--surface);
+    padding: var(--space-5);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.sync-final-session-info .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-3);
+}
+
+.sync-final-session-info .info-item {
+    font-size: 0.95rem;
+}
+
+.sync-final-session-info .info-item strong {
+    color: var(--ink);
+    display: inline-block;
+    min-width: 120px;
+}
+
+.sync-final-tables {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+}
+
+.sync-final-tables .table-section {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.sync-final-tables .table-section .section-title {
+    padding: var(--space-4) var(--space-5);
+    background: var(--primary-soft);
+    font-weight: 600;
+    margin: 0;
+}
+
+.sync-final-tables .table-section .table {
+    margin-bottom: 0;
+}
+
+.sync-final-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+}
+
+/* Confidence score badge */
+.confidence-badge {
+    font-size: 0.75rem;
+    background: var(--primary-soft);
+    color: var(--primary);
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    margin-left: 8px;
+}

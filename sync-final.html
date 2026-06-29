@@ -1,11 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Session Review · AttendU</title>
+
+    <!-- Base + Layout -->
+    <link rel="stylesheet" href="assets/css/base/reset.css" />
+    <link rel="stylesheet" href="assets/css/base/variables.css" />
+    <link rel="stylesheet" href="assets/css/base/typography.css" />
+    <link rel="stylesheet" href="assets/css/layout/layout.css" />
+    <link rel="stylesheet" href="assets/css/layout/sidebar.css" />
+    <link rel="stylesheet" href="assets/css/layout/navbar.css" />
+
+    <!-- Components -->
+    <link rel="stylesheet" href="assets/css/components/buttons.css" />
+    <link rel="stylesheet" href="assets/css/components/forms.css" />
+    <link rel="stylesheet" href="assets/css/components/toast.css" />
+    <link rel="stylesheet" href="assets/css/components/loader.css" />
+    <link rel="stylesheet" href="assets/css/components/tables.css" />
+    <link rel="stylesheet" href="assets/css/components/modals.css" />
+    <link rel="stylesheet" href="assets/css/components/badges.css" />
+
+    <!-- Page -->
+    <link rel="stylesheet" href="assets/css/pages/sync-final.css" />
 </head>
 <body>
-    
+
+    <div class="app-shell">
+        <div id="sidebar"></div>
+        <div class="app-main">
+            <div id="navbar"></div>
+            <div class="app-content sync-final-page">
+
+                <div class="sync-final-header">
+                    <h1>Session Review</h1>
+                    <span id="sync-status" class="badge badge-info">Pending</span>
+                </div>
+
+                <!-- Summary Cards -->
+                <div class="sync-final-summary" id="sync-summary">
+                    <div class="stat-card total">
+                        <span class="stat-number" id="sync-total">0</span>
+                        <span class="stat-label">Total</span>
+                    </div>
+                    <div class="stat-card present">
+                        <span class="stat-number" id="sync-present">0</span>
+                        <span class="stat-label">Present</span>
+                    </div>
+                    <div class="stat-card late">
+                        <span class="stat-number" id="sync-late">0</span>
+                        <span class="stat-label">Late</span>
+                    </div>
+                    <div class="stat-card absent">
+                        <span class="stat-number" id="sync-absent">0</span>
+                        <span class="stat-label">Absent</span>
+                    </div>
+                </div>
+
+                <!-- Session Info -->
+                <div class="sync-final-session-info" id="sync-session-info">
+                    <h3>Session Information</h3>
+                    <div class="info-grid" id="session-info-grid">
+                        <!-- filled by JS -->
+                    </div>
+                </div>
+
+                <!-- Attendance Tables -->
+                <div class="sync-final-tables">
+                    <div class="table-section">
+                        <h4 class="section-title">Present Students</h4>
+                        <div class="table-wrapper">
+                            <table class="table" id="sync-present-table">
+                                <thead><tr><th>Student Code</th><th>Name</th><th>Confidence</th></tr></thead>
+                                <tbody id="sync-present-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="table-section">
+                        <h4 class="section-title">Late Students</h4>
+                        <div class="table-wrapper">
+                            <table class="table" id="sync-late-table">
+                                <thead><tr><th>Student Code</th><th>Name</th><th>Confidence</th></tr></thead>
+                                <tbody id="sync-late-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="table-section">
+                        <h4 class="section-title">Absent Students</h4>
+                        <div class="table-wrapper">
+                            <table class="table" id="sync-absent-table">
+                                <thead><tr><th>Student Code</th><th>Name</th></tr></thead>
+                                <tbody id="sync-absent-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="sync-final-actions">
+                    <button class="btn btn-secondary" id="cancel-sync-btn">Back to Sessions</button>
+                    <button class="btn btn-primary" id="confirm-sync-btn">Confirm &amp; Submit</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SCRIPTS ====== -->
+    <!-- Core -->
+    <script src="assets/js/core/config.js"></script>
+    <script src="assets/js/core/storage.js"></script>
+    <script src="assets/js/core/api.js"></script>
+    <script src="assets/js/core/auth.js"></script>
+    <script src="assets/js/core/ui.js"></script>
+    <script src="assets/js/core/utils.js"></script>
+    <script src="assets/js/core/validators.js"></script>
+
+    <!-- Shell -->
+    <script src="assets/js/components/sidebar.js"></script>
+    <script src="assets/js/components/navbar.js"></script>
+
+    <!-- Page-specific -->
+    <script src="assets/js/pages/syncFinal.js"></script>
+
+    <!-- Init -->
+    <script>
+        (function() {
+            guardPage(["admin", "instructor"]);
+            renderAppShell({ activeKey: "sessions", pageTitle: "Session Review" });
+            initSyncFinalPage();
+        })();
+    </script>
 </body>
 </html>

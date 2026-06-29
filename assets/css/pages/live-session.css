@@ -1,0 +1,115 @@
+/* =====================================================================
+   pages/live-session.css
+   Styles for the live session page.
+   ===================================================================== */
+
+.live-session-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+.live-session-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    background: var(--surface);
+    padding: var(--space-5);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+}
+
+.live-session-header .session-meta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+}
+
+.live-session-header .session-meta .course-group {
+    font-size: 0.95rem;
+    color: var(--muted);
+}
+
+.live-session-header .timer {
+    font-size: 2rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    color: var(--primary);
+    background: var(--primary-soft);
+    padding: 0.25rem 1rem;
+    border-radius: var(--radius-sm);
+    min-width: 120px;
+    text-align: center;
+}
+
+.live-session-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-4);
+}
+
+.live-session-summary .stat-card {
+    background: var(--surface);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    border-left: 4px solid var(--border);
+}
+
+.live-session-summary .stat-card .stat-number {
+    font-size: 1.8rem;
+    font-weight: 600;
+    display: block;
+}
+
+.live-session-summary .stat-card .stat-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.live-session-summary .stat-card.total { border-left-color: var(--muted); }
+.live-session-summary .stat-card.present { border-left-color: var(--success); }
+.live-session-summary .stat-card.late { border-left-color: var(--warning); }
+.live-session-summary .stat-card.absent { border-left-color: var(--danger); }
+.live-session-summary .stat-card.not-recorded { border-left-color: var(--info); }
+
+.live-session-table-container {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.live-session-table-container .table {
+    margin-bottom: 0;
+}
+
+.live-session-table-container .table th {
+    background: var(--primary-soft);
+}
+
+/* Status badge colors for attendance rows */
+.badge-present { background: var(--success-soft); color: var(--success); }
+.badge-late    { background: var(--warning-soft); color: var(--warning); }
+.badge-absent  { background: var(--danger-soft); color: var(--danger); }
+.badge-not-recorded { background: var(--info-soft); color: var(--info); }
+
+.live-session-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+}
+
+/* Webcam video (hidden, but can be shown for debugging) */
+#webcam-video {
+    display: none; /* hidden by default; we just capture frames */
+    width: 320px;
+    height: 240px;
+    background: #000;
+}
