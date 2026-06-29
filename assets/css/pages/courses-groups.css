@@ -1,0 +1,92 @@
+/* =====================================================================
+   pages/courses-groups.css
+   Shared styles for Courses and Groups pages.
+   ===================================================================== */
+
+.courses-page-header,
+.groups-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-5);
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.courses-toolbar,
+.groups-toolbar {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: var(--space-4);
+}
+
+.courses-toolbar .form-group,
+.groups-toolbar .form-group {
+    margin-bottom: 0;
+}
+
+.courses-search-wrap,
+.groups-search-wrap {
+    position: relative;
+    flex: 1 1 240px;
+    min-width: 180px;
+}
+
+.courses-search-wrap .form-input,
+.groups-search-wrap .form-input {
+    padding-right: 36px;
+    width: 100%;
+}
+
+.courses-search-wrap .search-icon,
+.groups-search-wrap .search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+    width: 18px;
+    height: 18px;
+}
+
+/* ----- Course / Group form inside modal ----- */
+
+.course-form-grid,
+.group-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+}
+
+.course-form-grid .full-width,
+.group-form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 720px) {
+    .course-form-grid,
+    .group-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ----- Course / Group table columns ----- */
+
+.table .course-code-col,
+.table .group-code-col {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.table .course-dates-col {
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.table .group-course-col {
+    font-weight: 500;
+}
