@@ -1,0 +1,219 @@
+/* ============================================================================
+   students.css — Page-specific styles for students.html.
+   Component-level styling lives in tables.css / pagination.css / modals.css /
+   badges.css / forms.css / buttons.css — this file only contains layout and
+   overrides specific to this page, per the project's CSS layering rule.
+   ============================================================================ */
+
+.students-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-5);
+    flex-wrap: wrap;
+}
+
+.students-page-title {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.students-toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+    flex-wrap: wrap;
+}
+
+.students-search-wrap {
+    position: relative;
+    flex: 1 1 260px;
+    max-width: 360px;
+}
+
+.students-search-wrap svg {
+    position: absolute;
+    left: var(--space-3);
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--muted);
+    pointer-events: none;
+}
+
+.students-search-wrap .form-input {
+    padding-left: var(--space-7);
+}
+
+.students-group-filter {
+    flex: 0 0 200px;
+}
+
+/* Student identity cell (avatar + name + code) */
+.student-name-cell {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+}
+
+.student-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    object-fit: cover;
+    background: var(--primary-soft);
+    flex-shrink: 0;
+}
+
+.student-avatar-fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-full);
+    background: var(--primary-soft);
+    color: var(--primary);
+    font-size: 0.8rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.student-name {
+    font-weight: 500;
+    color: var(--ink);
+}
+
+.student-code {
+    font-size: 0.78rem;
+    color: var(--muted);
+}
+
+/* Student form (inside #student-modal) */
+.student-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+}
+
+.student-form-grid .form-group-full {
+    grid-column: 1 / -1;
+}
+
+.student-form-readonly-banner {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: var(--space-3) var(--space-4);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    margin-bottom: var(--space-2);
+}
+
+.student-form-readonly-banner span:first-child {
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.student-form-readonly-banner span:last-child {
+    font-size: 0.8rem;
+    color: var(--muted);
+}
+
+/* Face image picker */
+.face-image-picker {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+}
+
+.face-image-preview {
+    width: 88px;
+    height: 88px;
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--border);
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.face-image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.face-image-preview svg {
+    width: 28px;
+    height: 28px;
+    color: var(--muted);
+}
+
+.face-image-actions {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+/* Course multi-select rendered as a checkbox/chip list */
+.course-checkbox-list {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    max-height: 160px;
+    overflow-y: auto;
+    padding: var(--space-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--bg);
+}
+
+.course-checkbox-item {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    font-size: 0.82rem;
+    cursor: pointer;
+}
+
+.course-checkbox-item input {
+    accent-color: var(--primary);
+}
+
+@media (max-width: 720px) {
+    .student-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .face-image-picker {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 600px) {
+    .students-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .students-group-filter {
+        flex: 1 1 auto;
+    }
+}

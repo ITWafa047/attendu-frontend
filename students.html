@@ -1,11 +1,170 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Students — AttendU</title>
+
+    <link rel="stylesheet" href="assets/css/base/reset.css">
+    <link rel="stylesheet" href="assets/css/base/variables.css">
+    <link rel="stylesheet" href="assets/css/base/typography.css">
+    <link rel="stylesheet" href="assets/css/layout/layout.css">
+    <link rel="stylesheet" href="assets/css/layout/sidebar.css">
+    <link rel="stylesheet" href="assets/css/layout/navbar.css">
+    <link rel="stylesheet" href="assets/css/components/buttons.css">
+    <link rel="stylesheet" href="assets/css/components/forms.css">
+    <link rel="stylesheet" href="assets/css/components/toast.css">
+    <link rel="stylesheet" href="assets/css/components/loader.css">
+    <link rel="stylesheet" href="assets/css/components/tables.css">
+    <link rel="stylesheet" href="assets/css/components/pagination.css">
+    <link rel="stylesheet" href="assets/css/components/modals.css">
+    <link rel="stylesheet" href="assets/css/components/badges.css">
+    <link rel="stylesheet" href="assets/css/pages/students.css">
 </head>
+
 <body>
-    
+    <div class="app-shell">
+        <div id="sidebar"></div>
+
+        <div class="app-main">
+            <div id="navbar"></div>
+
+            <main class="app-content">
+                <div class="students-page-header">
+                    <h1 class="students-page-title">Students</h1>
+                    <button type="button" class="btn btn-primary" id="add-student-btn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16"
+                            height="16" style="margin-right:6px; vertical-align:-2px;">
+                            <line x1="12" y1="5" x2="12" y2="19" />
+                            <line x1="5" y1="12" x2="19" y2="12" />
+                        </svg>
+                        Add Student
+                    </button>
+                </div>
+
+                <div class="students-toolbar">
+                    <div class="students-search-wrap">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="7" />
+                            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                        </svg>
+                        <input type="text" id="students-search-input" class="form-input"
+                            placeholder="Search by name, code, or email">
+                    </div>
+                    <select id="students-group-filter" class="form-select students-group-filter">
+                        <option value="">All groups</option>
+                    </select>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="table" id="students-table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>Groups</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-table-body">
+                            <!-- rows injected by students.js -->
+                        </tbody>
+                    </table>
+
+                    <div id="students-empty-state" class="table-empty" style="display:none;">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                        </svg>
+                        <div class="table-empty-title">No students found</div>
+                        <div class="table-empty-hint">Try a different search term or group filter, or add the first
+                            student.</div>
+                    </div>
+                </div>
+
+                <div class="pagination" id="students-pagination"></div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Add / Edit Student modal -->
+    <div id="student-modal" class="modal">
+        <div class="modal-overlay" data-modal-close></div>
+        <div class="modal-box modal-box-lg">
+            <div class="modal-header">
+                <h2 class="modal-title" id="student-modal-title">Add Student</h2>
+                <button type="button" class="modal-close" data-modal-close aria-label="Close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+            <form id="student-form" novalidate>
+                <div class="modal-body">
+                    <div class="student-form-grid" id="student-form-grid">
+                        <!-- fields injected by studentForm.js, differ by create/edit mode -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+                    <button type="submit" class="btn btn-primary" id="student-form-submit-btn">Save Student</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete confirmation modal -->
+    <div id="delete-student-modal" class="modal">
+        <div class="modal-overlay" data-modal-close></div>
+        <div class="modal-box modal-box-sm">
+            <div class="modal-header">
+                <h2 class="modal-title">Delete student</h2>
+                <button type="button" class="modal-close" data-modal-close aria-label="Close">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-text">This will permanently remove <strong id="delete-student-name"></strong> and their
+                    attendance history. This cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-modal-close>Cancel</button>
+                <button type="button" class="btn btn-danger" id="confirm-delete-student-btn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core scripts — strict dependency order -->
+    <script src="assets/js/core/config.js"></script>
+    <script src="assets/js/core/storage.js"></script>
+    <script src="assets/js/core/api.js"></script>
+    <script src="assets/js/core/auth.js"></script>
+    <script src="assets/js/core/ui.js"></script>
+    <script src="assets/js/core/utils.js"></script>
+    <script src="assets/js/core/validators.js"></script>
+
+    <!-- Components -->
+    <script src="assets/js/components/sidebar.js"></script>
+    <script src="assets/js/components/navbar.js"></script>
+
+    <!-- Page scripts (studentForm.js before students.js — students.js's
+         loadGroupAndCourseOptions() calls functions studentForm.js defines) -->
+    <script src="assets/js/pages/studentForm.js"></script>
+    <script src="assets/js/pages/students.js"></script>
+
+    <script>
+        guardPage(["admin"]);
+        renderAppShell({ activeKey: "students", pageTitle: "Students" });
+        initStudentsPage();
+    </script>
 </body>
+
 </html>

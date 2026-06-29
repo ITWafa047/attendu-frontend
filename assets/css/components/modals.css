@@ -1,0 +1,133 @@
+/* ============================================================================
+   modals.css — Generic modal dialog.
+   Markup convention (already documented in ui.js, this just styles it):
+
+   <div id="some-modal" class="modal">
+     <div class="modal-overlay" data-modal-close></div>
+     <div class="modal-box"> ...content... </div>
+   </div>
+
+   openModal(id)/closeModal(id) toggle the "modal-open" class on #some-modal.
+   Anything with [data-modal-close] inside it closes it on click; so does
+   Escape — both wired globally in ui.js, not per-page.
+   ============================================================================ */
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--transition-base), visibility var(--transition-base);
+}
+
+.modal.modal-open {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(16, 24, 40, 0.55);
+    backdrop-filter: blur(2px);
+}
+
+.modal-box {
+    position: relative;
+    width: 100%;
+    max-width: 560px;
+    max-height: calc(100vh - var(--space-8));
+    overflow-y: auto;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    transform: scale(0.96) translateY(8px);
+    transition: transform var(--transition-base);
+}
+
+.modal.modal-open .modal-box {
+    transform: scale(1) translateY(0);
+}
+
+.modal-box-lg {
+    max-width: 720px;
+}
+
+.modal-box-sm {
+    max-width: 400px;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-5) var(--space-5) var(--space-4);
+    border-bottom: 1px solid var(--border);
+}
+
+.modal-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--ink);
+}
+
+.modal-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: var(--radius-sm);
+    color: var(--muted);
+    transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.modal-close svg {
+    width: 18px;
+    height: 18px;
+}
+
+.modal-close:hover {
+    background: var(--danger-soft);
+    color: var(--danger);
+}
+
+.modal-body {
+    padding: var(--space-5);
+}
+
+.modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5) var(--space-5);
+    border-top: 1px solid var(--border);
+}
+
+.modal-text {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+    .modal-box {
+        max-width: 100%;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding: var(--space-4);
+    }
+}

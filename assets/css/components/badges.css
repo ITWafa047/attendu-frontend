@@ -1,0 +1,42 @@
+/* ============================================================================
+   badges.css — Small status/tag pills.
+   Used now for student group/course tags; the present/late/absent variants
+   are defined here too since they'll be reused as-is by the future
+   Attendance module (see PROJECT_CONTEXT.md badges.css note) — establishing
+   the naming convention once now avoids reinventing it later.
+   ============================================================================ */
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+    padding: 2px var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.6;
+    white-space: nowrap;
+}
+
+.badge-success { background: var(--success-soft); color: var(--success); }
+.badge-warning { background: var(--warning-soft); color: var(--warning); }
+.badge-danger  { background: var(--danger-soft);  color: var(--danger);  }
+.badge-info    { background: var(--info-soft);    color: var(--info);    }
+.badge-accent  { background: var(--accent-soft);  color: var(--accent);  }
+.badge-neutral {
+    background: var(--bg);
+    color: var(--muted);
+    border: 1px solid var(--border);
+}
+
+/* Reserved for the future Attendance Policies / Live Session modules. */
+.badge-present { background: var(--success-soft); color: var(--success); }
+.badge-late    { background: var(--warning-soft); color: var(--warning); }
+.badge-absent  { background: var(--danger-soft);  color: var(--danger);  }
+
+/* Chip list wrapper — used for a student's group/course tags */
+.badge-chip-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1);
+}
