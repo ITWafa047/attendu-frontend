@@ -1,0 +1,79 @@
+/* =====================================================================
+   pages/users.css
+   Styles for the Users / Instructors page.
+   ===================================================================== */
+
+.users-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-5);
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.users-toolbar {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: var(--space-4);
+}
+
+.users-toolbar .form-group {
+    margin-bottom: 0;
+}
+
+.users-search-wrap {
+    position: relative;
+    flex: 1 1 240px;
+    min-width: 180px;
+}
+
+.users-search-wrap .form-input {
+    padding-right: 36px;
+    width: 100%;
+}
+
+.users-search-wrap .search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+    width: 18px;
+    height: 18px;
+}
+
+/* ----- User form inside modal ----- */
+.user-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+}
+
+.user-form-grid .full-width {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 720px) {
+    .user-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ----- Table adjustments ----- */
+.table .user-name-col {
+    font-weight: 500;
+}
+
+.table .user-role-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 500;
+    background: var(--primary-soft);
+    color: var(--primary);
+}
