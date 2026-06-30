@@ -1,0 +1,162 @@
+/* =====================================================================
+   pages/reports.css
+   Shared styles for Reports list and detail pages.
+   ===================================================================== */
+
+.reports-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-5);
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.reports-toolbar {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: var(--space-4);
+}
+
+.reports-toolbar .form-group {
+    margin-bottom: 0;
+}
+
+.reports-search-wrap {
+    position: relative;
+    flex: 1 1 240px;
+    min-width: 180px;
+}
+
+.reports-search-wrap .form-input {
+    padding-right: 36px;
+    width: 100%;
+}
+
+.reports-search-wrap .search-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+    width: 18px;
+    height: 18px;
+}
+
+/* ----- Report table columns ----- */
+.table .report-student-col {
+    font-weight: 500;
+}
+
+.table .report-percentage-col {
+    font-weight: 600;
+}
+
+.report-percentage-high {
+    color: var(--success);
+}
+
+.report-percentage-medium {
+    color: var(--warning);
+}
+
+.report-percentage-low {
+    color: var(--danger);
+}
+
+/* ----- Detail page ----- */
+.report-detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+}
+
+.report-detail-student-info {
+    background: var(--surface);
+    padding: var(--space-5);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    margin-bottom: var(--space-5);
+}
+
+.report-detail-student-info .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: var(--space-3);
+}
+
+.report-detail-student-info .info-item {
+    font-size: 0.95rem;
+}
+
+.report-detail-student-info .info-item strong {
+    color: var(--ink);
+    display: inline-block;
+    min-width: 120px;
+}
+
+.report-detail-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: var(--space-3);
+    margin-bottom: var(--space-5);
+}
+
+.report-detail-summary .stat-card {
+    background: var(--surface);
+    padding: var(--space-3);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    border-left: 4px solid var(--border);
+}
+
+.report-detail-summary .stat-card .stat-number {
+    font-size: 1.5rem;
+    font-weight: 600;
+    display: block;
+}
+
+.report-detail-summary .stat-card .stat-label {
+    font-size: 0.8rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.report-detail-summary .stat-card.total {
+    border-left-color: var(--muted);
+}
+
+.report-detail-summary .stat-card.present {
+    border-left-color: var(--success);
+}
+
+.report-detail-summary .stat-card.late {
+    border-left-color: var(--warning);
+}
+
+.report-detail-summary .stat-card.absent {
+    border-left-color: var(--danger);
+}
+
+.report-detail-sessions {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.report-detail-sessions .table {
+    margin-bottom: 0;
+}
+
+.report-detail-sessions .table th {
+    background: var(--primary-soft);
+}
