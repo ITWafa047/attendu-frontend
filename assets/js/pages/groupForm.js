@@ -99,6 +99,12 @@ function validateGroupForm(data) {
     if (!data.group_name) {
         errors.group_name = "Group name is required";
     }
+    if (!data.group_code) {
+        errors.group_code = "Group code is required";
+    }
+    if (!data.academic_year) {
+        errors.academic_year = "Please select an academic year";
+    }
     if (!data.course_id) {
         errors["group-course-id"] = "Please select a course";
     }

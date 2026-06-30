@@ -121,20 +121,16 @@ async function openSessionModal(mode, session = null) {
     if (mode === "add") {
         title.textContent = "Add Session";
         editingSessionId = null;
-        // Set default status to "scheduled"
-        document.getElementById("session-status").value = "scheduled";
         document.getElementById("session-type").value = "";
         document.getElementById("session-date").value = "";
         document.getElementById("session-day").value = "";
     } else if (mode === "edit" && session) {
         title.textContent = "Edit Session";
         editingSessionId = session.id;
-        document.getElementById("session-title").value = session.title || "";
         document.getElementById("session-description").value = session.description || session.location || "";
         document.getElementById("session-course-id").value = session.course_id || "";
         document.getElementById("session-group-id").value = session.group_id || "";
         document.getElementById("session-instructor-id").value = session.instructor_id || "";
-        document.getElementById("session-status").value = session.status || "scheduled";
         document.getElementById("session-type").value = session.session_type || "";
         document.getElementById("session-date").value = session.session_date ? session.session_date.slice(0, 16) : (session.start_time ? session.start_time.slice(0, 16) : "");
         updateSessionDay();

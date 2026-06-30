@@ -72,11 +72,16 @@ async function initLiveSessionPage() {
 
 // ---- Render header ----
 function renderSessionHeader(data) {
+    const instructorValue = data.instructors;
+    const instructorText = Array.isArray(instructorValue)
+        ? instructorValue.join(", ")
+        : instructorValue || "—";
+
     document.getElementById("session-title").textContent = data.course_name || "Session";
     document.getElementById("session-course-group").textContent =
         `${data.course_name || ""} · ${data.group_name || ""}`;
     document.getElementById("session-instructor").textContent =
-        `Instructor: ${data.instructors || "—"}`;
+        `Instructor: ${instructorText}`;
 }
 
 // ---- Summary update ----
@@ -208,19 +213,9 @@ function addAttendanceRow(data) {
     // Update summary counters
     if (status === "present") summary.present++;
     else if (status === "late") summary.late++;
-    // total remains unchanged (total is expected count)
-    // we don't decrement notRecorded because we don't have per-student tracking; but we can recalc from table later if needed.
-    updateSummary(summary);
-    // For simplicity, we just increment; notRecorded = total - present - late - absent (but we don't know absent yet)
-    // We'll compute notRecorded from total minus present+late+absent (absent unknown)
-    // Better to recalc from table rows? We'll just use the summary from server initially, then increment on present/late.
-    // We'll update notRecorded as total - present - late - absent (assuming absent is 0 for now)
-    // But we don't have absent count yet; we'll just leave as is.
-    // The summary object will be updated when we get absent events (but absent events might not come via WS?).
-    // The spec says unknown/rejected are toast-only, not table. So absent may be determined after sync.
-    // We'll maintain summary only from present/late increments, and notRecorded = total - present - late - absent (absent will be updated only after sync, but we won't have absent during live). So just show present/late counts.
-    // We'll set notRecorded = total - present - late (assuming absent 0 for now)
-    summary.notRecorded = summary.total - summary.present - summary.late;
+    else if (status === "absent") summary.absent++;
+
+    summary.notRecorded = Math.max(0, summary.total - summary.present - summary.late - summary.absent);
     updateSummary(summary);
 }
 

@@ -19,14 +19,12 @@ async function laravelRequest(endpoint, options = {}) {
 
 /**
  * Call the Python server (AI service). Automatically attaches the
- * X-API-Key header from PYTHON_CONFIG.API_KEY.
- * ⚠️ ASSUMPTION: Python REST endpoints expect the key as a header named
- * "X-API-Key" — confirm this against the actual Python service. If it
- * instead expects a query param (like the WebSocket does), move this
- * into the URL building step instead of the headers.
+ * bearer token from storage.js when available, just like the Laravel
+ * wrapper does. This aligns Python REST requests with the same auth
+ * pattern used by WebSocket connections.
  */
 async function pythonRequest(endpoint, options = {}) {
-    return apiRequest(PYTHON_CONFIG.BASE_URL, endpoint, { ...options, headers, withAuth: true });
+    return apiRequest(PYTHON_CONFIG.BASE_URL, endpoint, { ...options, withAuth: true });
 }
 
 /**

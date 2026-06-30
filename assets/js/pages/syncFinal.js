@@ -29,14 +29,22 @@ async function loadSyncData() {
     showLoader();
     try {
         const response = await pythonRequest(Python.sync.getSynced(sessionId));
-        // Response shape: { session_schedule_id, synced_at, attendance_data: { summary, present_students, late_students, absent_students }, session_info }
-        if (response.status === "success" && response.attendance_data) {
-            syncData = response;
-            renderSyncData(syncData);
+        // Response contract must include a top-level `status: "success"` field.
+        // If the Python service returns raw attendance/session payload without status,
+        // this page will treat it as an invalid response.
+        if (response?.status === "success") {
+            if (response.attendance_data) {
+                syncData = response;
+                renderSyncData(syncData);
+            } else {
+                showToast(response.message || "Synced response missing attendance_data", "warning");
+                renderEmptyState();
+            }
+        } else if (response?.attendance_data) {
+            showToast("Invalid API response: status field is required", "error");
+            renderEmptyState();
         } else {
-            // No data or error
-            showToast(response.message || "No synced data found", "warning");
-            // Still show empty state
+            showToast(response?.message || response?.detail || "Failed to load synced data", "error");
             renderEmptyState();
         }
     } catch (err) {
