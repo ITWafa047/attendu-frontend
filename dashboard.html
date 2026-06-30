@@ -1,56 +1,97 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
-
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard · AttendU</title>
 
-    <link rel="stylesheet" href="assets/css/base/reset.css">
-    <link rel="stylesheet" href="assets/css/base/variables.css">
-    <link rel="stylesheet" href="assets/css/base/typography.css">
-    <link rel="stylesheet" href="assets/css/layout/layout.css">
-    <link rel="stylesheet" href="assets/css/layout/sidebar.css">
-    <link rel="stylesheet" href="assets/css/layout/navbar.css">
-    <link rel="stylesheet" href="assets/css/components/buttons.css">
-    <link rel="stylesheet" href="assets/css/components/toast.css">
-    <link rel="stylesheet" href="assets/css/components/loader.css">
-</head>
+    <!-- Base + Layout -->
+    <link rel="stylesheet" href="assets/css/base/reset.css" />
+    <link rel="stylesheet" href="assets/css/base/variables.css" />
+    <link rel="stylesheet" href="assets/css/base/typography.css" />
+    <link rel="stylesheet" href="assets/css/layout/layout.css" />
+    <link rel="stylesheet" href="assets/css/layout/sidebar.css" />
+    <link rel="stylesheet" href="assets/css/layout/navbar.css" />
 
+    <!-- Components -->
+    <link rel="stylesheet" href="assets/css/components/buttons.css" />
+    <link rel="stylesheet" href="assets/css/components/forms.css" />
+    <link rel="stylesheet" href="assets/css/components/toast.css" />
+    <link rel="stylesheet" href="assets/css/components/loader.css" />
+    <link rel="stylesheet" href="assets/css/components/tables.css" />
+    <link rel="stylesheet" href="assets/css/components/pagination.css" />
+    <link rel="stylesheet" href="assets/css/components/modals.css" />
+    <link rel="stylesheet" href="assets/css/components/badges.css" />
+
+    <!-- Page -->
+    <link rel="stylesheet" href="assets/css/pages/dashboard.css" />
+</head>
 <body>
 
     <div class="app-shell">
-        <aside id="sidebar"></aside>
+        <div id="sidebar"></div>
 
         <div class="app-main">
-            <header id="navbar"></header>
+            <div id="navbar"></div>
 
-            <main class="app-content">
-                <!-- 🚧 Placeholder — the real Dashboard module (stat cards from
-                     GET /dashboard/stats) replaces this when we get to that module.
-                     This page exists right now only to host/test the sidebar + navbar shell. -->
-                <p class="text-muted">Dashboard content goes here — built in the Dashboard module.</p>
-            </main>
+            <div class="app-content dashboard-page">
+                <div class="dashboard-header">
+                    <h1>Dashboard</h1>
+                    <span class="text-muted" id="dashboard-last-updated">Last updated: —</span>
+                </div>
+
+                <!-- Stats Cards -->
+                <div class="dashboard-stats" id="dashboard-stats">
+                    <!-- Populated by JS -->
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="dashboard-recent">
+                    <h3 class="section-header">Recent Activity</h3>
+                    <div class="table-wrapper">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Description</th>
+                                    <th>Time</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dashboard-recent-tbody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Core scripts -->
-    <script src="assets/js/core/storage.js"></script>
+    <!-- ====== SCRIPTS ====== -->
+    <!-- Core -->
     <script src="assets/js/core/config.js"></script>
+    <script src="assets/js/core/storage.js"></script>
     <script src="assets/js/core/api.js"></script>
     <script src="assets/js/core/auth.js"></script>
     <script src="assets/js/core/ui.js"></script>
     <script src="assets/js/core/utils.js"></script>
     <script src="assets/js/core/validators.js"></script>
 
-    <!-- Shared shell components -->
+    <!-- Shell -->
     <script src="assets/js/components/sidebar.js"></script>
     <script src="assets/js/components/navbar.js"></script>
 
+    <!-- Page -->
+    <script src="assets/js/pages/dashboard.js"></script>
+
+    <!-- Init -->
     <script>
-        guardPage(); // any logged-in user (admin or instructor) can land here
-        renderAppShell({ activeKey: "dashboard", pageTitle: "Dashboard" });
+        (function() {
+            // Allow both admin and instructor
+            guardPage(["admin", "instructor"]);
+            renderAppShell({ activeKey: "dashboard", pageTitle: "Dashboard" });
+            initDashboardPage();
+        })();
     </script>
 </body>
-
 </html>

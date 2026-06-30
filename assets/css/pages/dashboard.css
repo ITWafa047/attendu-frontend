@@ -1,0 +1,124 @@
+/* =====================================================================
+   pages/dashboard.css
+   Styles for the real Dashboard page (stat cards + recent activity).
+   ===================================================================== */
+
+.dashboard-page {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+}
+
+.dashboard-header h1 {
+    margin: 0;
+}
+
+.dashboard-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: var(--space-4);
+}
+
+.dashboard-stats .stat-card {
+    background: var(--surface);
+    padding: var(--space-4);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+    border-left: 4px solid var(--border);
+    transition: var(--transition-base);
+}
+
+.dashboard-stats .stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.dashboard-stats .stat-card .stat-number {
+    font-size: 2rem;
+    font-weight: 600;
+    display: block;
+    line-height: 1.2;
+}
+
+.dashboard-stats .stat-card .stat-label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: var(--space-1);
+}
+
+/* Color variants for stat cards */
+.dashboard-stats .stat-card.students { border-left-color: var(--primary); }
+.dashboard-stats .stat-card.courses { border-left-color: var(--accent); }
+.dashboard-stats .stat-card.groups { border-left-color: var(--info); }
+.dashboard-stats .stat-card.sessions { border-left-color: var(--success); }
+.dashboard-stats .stat-card.instructors { border-left-color: var(--warning); }
+.dashboard-stats .stat-card.attendance { border-left-color: var(--danger); }
+.dashboard-stats .stat-card.rate { border-left-color: var(--accent); }
+
+/* Recent activity section */
+.dashboard-recent {
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+}
+
+.dashboard-recent .section-header {
+    padding: var(--space-4) var(--space-5);
+    background: var(--primary-soft);
+    font-weight: 600;
+    margin: 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.dashboard-recent .table {
+    margin-bottom: 0;
+}
+
+.dashboard-recent .table .activity-time-col {
+    white-space: nowrap;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.dashboard-recent .table .activity-type-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.activity-type-session {
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.activity-type-student {
+    background: var(--primary-soft);
+    color: var(--primary);
+}
+
+.activity-type-warning {
+    background: var(--warning-soft);
+    color: var(--warning);
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .dashboard-stats {
+        grid-template-columns: 1fr 1fr;
+    }
+}
