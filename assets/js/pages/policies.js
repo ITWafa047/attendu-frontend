@@ -86,12 +86,10 @@ function renderPoliciesTable(policies) {
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Late Threshold (min)</th>
-                        <th>Absence Threshold (%)</th>
-                        <th>Warning After</th>
-                        <th>Auto-warn</th>
+                        <th>Course</th>
+                        <th>Max Absences</th>
+                        <th>Min Attend</th>
+                        <th>Max Attend</th>
                         <th style="width: 80px;">Actions</th>
                     </tr>
                 </thead>
@@ -99,28 +97,24 @@ function renderPoliciesTable(policies) {
     `;
 
     for (const policy of policies) {
-        const name = policy.name || "Untitled";
-        const desc = policy.description || "";
-        const late = policy.late_threshold_minutes ?? "—";
-        const absence = policy.absence_threshold_percent ?? "—";
-        const warningAfter = policy.warning_after_absences ?? "—";
-        const autoWarn = policy.auto_warn ? "Yes" : "No";
+        const courseName = policy.course_name || "Untitled";
+        const maxAbsences = policy.max_absences_allowed ?? "—";
+        const minAttend = policy.min_attend ?? "—";
+        const maxAttend = policy.max_attend ?? "—";
 
         html += `
             <tr>
-                <td class="policy-name-col">${escapeHtml(name)}</td>
-                <td class="policy-description-col" title="${escapeHtml(desc)}">${escapeHtml(desc)}</td>
-                <td class="policy-threshold-col">${late}</td>
-                <td class="policy-threshold-col">${absence}</td>
-                <td>${warningAfter}</td>
-                <td>${autoWarn}</td>
+                <td class="policy-name-col">${escapeHtml(courseName)}</td>
+                <td class="policy-threshold-col">${maxAbsences}</td>
+                <td class="policy-threshold-col">${minAttend}</td>
+                <td class="policy-threshold-col">${maxAttend}</td>
                 <td>
                     <button class="table-action-btn edit-policy-btn" data-id="${policy.id}" title="Edit">
                         <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M14 2L18 6L7 17H3V13L14 2Z" />
                         </svg>
                     </button>
-                    <button class="table-action-btn table-action-danger delete-policy-btn" data-id="${policy.id}" data-name="${escapeHtml(name)}" title="Delete">
+                    <button class="table-action-btn table-action-danger delete-policy-btn" data-id="${policy.id}" data-name="${escapeHtml(courseName)}" title="Delete">
                         <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M3 6h14M8 6V4h4v2M6 18h8a1 1 0 0 0 1-1V7H5v10a1 1 0 0 0 1 1Z" />
                         </svg>
@@ -141,7 +135,7 @@ function renderPoliciesTable(policies) {
                 const response = await laravelRequest(Laravel.attendancePolicies.show(id));
                 const policy = response.data;
                 if (policy) {
-                    openPolicyModal("edit", policy);
+                    await openPolicyModal("edit", policy);
                 } else {
                     showToast("Policy not found", "error");
                 }

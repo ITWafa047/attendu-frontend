@@ -73,37 +73,26 @@
                 <form id="policy-form" novalidate>
                     <div class="policy-form-grid">
                         <div class="form-group full-width">
-                            <label class="form-label" for="policy-name">Policy Name <span class="text-muted">*</span></label>
-                            <input type="text" class="form-input" id="policy-name" placeholder="e.g. Standard Policy" required />
-                            <div class="form-error" id="policy-name-error"></div>
-                        </div>
-                        <div class="form-group full-width">
-                            <label class="form-label" for="policy-description">Description</label>
-                            <textarea class="form-textarea" id="policy-description" rows="2" placeholder="Optional description…"></textarea>
-                            <div class="form-error" id="policy-description-error"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="policy-late-threshold">Late Threshold (minutes) <span class="text-muted">*</span></label>
-                            <input type="number" class="form-input" id="policy-late-threshold" placeholder="e.g. 15" min="0" required />
-                            <div class="form-error" id="policy-late-threshold-error"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="policy-absence-threshold">Absence Threshold (%) <span class="text-muted">*</span></label>
-                            <input type="number" class="form-input" id="policy-absence-threshold" placeholder="e.g. 25" min="0" max="100" required />
-                            <div class="form-error" id="policy-absence-threshold-error"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="policy-warning-after">Send Warning After (absences)</label>
-                            <input type="number" class="form-input" id="policy-warning-after" placeholder="e.g. 3" min="0" />
-                            <div class="form-error" id="policy-warning-after-error"></div>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label" for="policy-auto-warn">Auto‑warn</label>
-                            <select class="form-select" id="policy-auto-warn">
-                                <option value="1">Enabled</option>
-                                <option value="0">Disabled</option>
+                            <label class="form-label" for="policy-course-id">Course <span class="text-muted">*</span></label>
+                            <select class="form-select" id="policy-course-id" required>
+                                <option value="">Select a course</option>
                             </select>
-                            <div class="form-error" id="policy-auto-warn-error"></div>
+                            <div class="form-error" id="policy-course-id-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="policy-max-absences">Max Absences Allowed <span class="text-muted">*</span></label>
+                            <input type="number" class="form-input" id="policy-max-absences" placeholder="e.g. 3" min="0" required />
+                            <div class="form-error" id="policy-max-absences-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="policy-min-attend">Minimum Attend <span class="text-muted">*</span></label>
+                            <input type="number" class="form-input" id="policy-min-attend" placeholder="e.g. 75" min="0" required />
+                            <div class="form-error" id="policy-min-attend-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="policy-max-attend">Maximum Attend <span class="text-muted">*</span></label>
+                            <input type="number" class="form-input" id="policy-max-attend" placeholder="e.g. 100" min="0" required />
+                            <div class="form-error" id="policy-max-attend-error"></div>
                         </div>
                     </div>
                 </form>

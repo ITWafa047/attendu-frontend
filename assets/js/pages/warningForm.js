@@ -4,8 +4,6 @@
 // Exposes openWarningModal() and populates student dropdown.
 // =====================================================================
 
-let currentStudentId = null;
-
 /**
  * Fetches and populates the student dropdown in the warning modal.
  */
@@ -49,7 +47,6 @@ async function openWarningModal() {
     clearWarningFormErrors();
 
     title.textContent = "Issue Warning";
-    currentStudentId = null;
 
     // Populate student and course dropdowns
     await populateWarningStudentSelect();

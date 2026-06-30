@@ -5,40 +5,57 @@
 // =====================================================================
 
 let editingPolicyId = null;
+let policyCourses = [];
 
 /**
  * Opens the policy modal in "add" or "edit" mode.
  * @param {string} mode - "add" or "edit"
  * @param {object|null} policy - policy data for edit mode
  */
-function openPolicyModal(mode, policy = null) {
+async function openPolicyModal(mode, policy = null) {
     const modal = document.getElementById("policy-modal");
     const title = document.getElementById("policy-modal-title");
     const form = document.getElementById("policy-form");
 
     form.reset();
     clearPolicyFormErrors();
+    await populatePolicyCourseSelect();
 
     if (mode === "add") {
         title.textContent = "Add Policy";
         editingPolicyId = null;
-        // Set default values
-        document.getElementById("policy-auto-warn").value = "1";
     } else if (mode === "edit" && policy) {
         title.textContent = "Edit Policy";
         editingPolicyId = policy.id;
-        document.getElementById("policy-name").value = policy.name || "";
-        document.getElementById("policy-description").value = policy.description || "";
-        document.getElementById("policy-late-threshold").value = policy.late_threshold_minutes ?? "";
-        document.getElementById("policy-absence-threshold").value = policy.absence_threshold_percent ?? "";
-        document.getElementById("policy-warning-after").value = policy.warning_after_absences ?? "";
-        document.getElementById("policy-auto-warn").value = policy.auto_warn ? "1" : "0";
+        document.getElementById("policy-course-id").value = policy.course_id || "";
+        document.getElementById("policy-max-absences").value = policy.max_absences_allowed ?? "";
+        document.getElementById("policy-min-attend").value = policy.min_attend ?? "";
+        document.getElementById("policy-max-attend").value = policy.max_attend ?? "";
     } else {
         console.warn("openPolicyModal: invalid mode or missing policy data");
         return;
     }
 
     openModal("policy-modal");
+}
+
+async function populatePolicyCourseSelect() {
+    const select = document.getElementById("policy-course-id");
+    if (!select || policyCourses.length > 0) {
+        return;
+    }
+
+    try {
+        const response = await laravelRequest(Laravel.courses.index);
+        policyCourses = response.data || [];
+        select.innerHTML = `<option value="">Select a course</option>` +
+            policyCourses.map(course => `
+                <option value="${course.id}">${escapeHtml(course.course_name)}</option>
+            `).join("");
+    } catch (err) {
+        console.error("Failed to load courses for policy form:", err);
+        showToast(err.message || "Could not load courses", "error");
+    }
 }
 
 function clearPolicyFormErrors() {
@@ -53,28 +70,29 @@ function clearPolicyFormErrors() {
 
 function getPolicyFormData() {
     return {
-        name: document.getElementById("policy-name").value.trim(),
-        description: document.getElementById("policy-description").value.trim(),
-        late_threshold_minutes: parseInt(document.getElementById("policy-late-threshold").value) || 0,
-        absence_threshold_percent: parseInt(document.getElementById("policy-absence-threshold").value) || 0,
-        warning_after_absences: parseInt(document.getElementById("policy-warning-after").value) || null,
-        auto_warn: document.getElementById("policy-auto-warn").value === "1",
+        course_id: parseInt(document.getElementById("policy-course-id").value, 10) || null,
+        max_absences_allowed: parseInt(document.getElementById("policy-max-absences").value, 10) || 0,
+        min_attend: parseInt(document.getElementById("policy-min-attend").value, 10) || 0,
+        max_attend: parseInt(document.getElementById("policy-max-attend").value, 10) || 0,
     };
 }
 
 function validatePolicyForm(data) {
     const errors = {};
-    if (!data.name) {
-        errors["policy-name"] = "Policy name is required";
+    if (!data.course_id) {
+        errors["policy-course-id"] = "Course is required";
     }
-    if (data.late_threshold_minutes < 0) {
-        errors["policy-late-threshold"] = "Must be 0 or greater";
+    if (data.max_absences_allowed < 0) {
+        errors["policy-max-absences"] = "Must be 0 or greater";
     }
-    if (data.absence_threshold_percent < 0 || data.absence_threshold_percent > 100) {
-        errors["policy-absence-threshold"] = "Must be between 0 and 100";
+    if (data.min_attend < 0) {
+        errors["policy-min-attend"] = "Must be 0 or greater";
     }
-    if (data.warning_after_absences !== null && data.warning_after_absences < 0) {
-        errors["policy-warning-after"] = "Must be 0 or greater";
+    if (data.max_attend < 0) {
+        errors["policy-max-attend"] = "Must be 0 or greater";
+    }
+    if (data.max_attend < data.min_attend) {
+        errors["policy-max-attend"] = "Max attend must be equal or greater than min attend";
     }
     return { valid: Object.keys(errors).length === 0, errors };
 }

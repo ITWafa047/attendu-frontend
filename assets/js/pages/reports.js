@@ -92,13 +92,17 @@ function renderReportsTable(reports) {
     `;
 
     for (const report of reports) {
-        const fullName = `${report.first_name || ""} ${report.last_name || ""}`.trim() || "—";
+        const fullName = `${report.first_name || ""} ${report.last_name || ""}`.trim() || report.student_name || "—";
         const code = report.student_code || "—";
         const total = report.total_sessions || 0;
         const present = report.present_count || 0;
         const late = report.late_count || 0;
         const absent = report.absent_count || 0;
-        const percentage = total > 0 ? ((present / total) * 100).toFixed(1) : "0.0";
+        const percentage = report.attendance_rate != null
+            ? parseFloat(report.attendance_rate).toFixed(1)
+            : total > 0
+                ? ((present / total) * 100).toFixed(1)
+                : "0.0";
         let percentClass = "";
         if (percentage >= 80) percentClass = "report-percentage-high";
         else if (percentage >= 60) percentClass = "report-percentage-medium";
@@ -114,7 +118,7 @@ function renderReportsTable(reports) {
                 <td>${absent}</td>
                 <td class="report-percentage-col ${percentClass}">${percentage}%</td>
                 <td>
-                    <a href="report-detail.html?id=${report.id}" class="btn btn-sm btn-primary">View</a>
+                    <a href="report-detail.html?id=${report.student_id}" class="btn btn-sm btn-primary">View</a>
                 </td>
             </tr>
         `;

@@ -77,10 +77,11 @@
                         <table class="table" id="report-sessions-table">
                             <thead>
                                 <tr>
-                                    <th>Session Title</th>
+                                    <th>Session</th>
                                     <th>Course</th>
                                     <th>Date</th>
                                     <th>Status</th>
+                                    <th style="width: 120px;">Action</th>
                                 </tr>
                             </thead>
                             <tbody id="report-sessions-tbody">
@@ -88,6 +89,34 @@
                             </tbody>
                         </table>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Session Attendance Modal -->
+    <div id="session-attendance-modal" class="modal">
+        <div class="modal-overlay" data-modal-close></div>
+        <div class="modal-box modal-box-xl">
+            <div class="modal-header">
+                <h2 class="modal-title" id="session-attendance-modal-title">Session Attendance</h2>
+                <button class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="session-attendance-meta" id="session-attendance-meta"></div>
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Student</th>
+                                <th>Code</th>
+                                <th>Status</th>
+                                <th>Check-in</th>
+                                <th style="width: 180px;">Update</th>
+                            </tr>
+                        </thead>
+                        <tbody id="session-attendance-tbody"></tbody>
+                    </table>
                 </div>
             </div>
         </div>

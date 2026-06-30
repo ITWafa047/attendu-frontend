@@ -34,9 +34,10 @@ function getUserFormData() {
     const lastName = document.getElementById("user-last-name").value.trim();
 
     return {
-        name: `${firstName} ${lastName}`.trim(),
+        first_name: firstName,
+        last_name: lastName,
         email: document.getElementById("user-email").value.trim(),
-        phone: document.getElementById("user-phone").value.trim() || null,
+        phone_number: document.getElementById("user-phone").value.trim() || null,
         gender: document.getElementById("user-gender").value,
         password: document.getElementById("user-password").value,
         password_confirmation: document.getElementById("user-password-confirm").value,

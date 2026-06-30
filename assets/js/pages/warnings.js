@@ -98,9 +98,10 @@ function renderWarningsTable(warnings) {
 
     for (const warning of warnings) {
         const studentName = warning.student_name || "—";
-        const reason = warning.warning_reason || warning.reason || "—";
-        const issuedAt = warning.issued_at ? formatDateTime(warning.issued_at) : "—";
+        const reason = warning.warning_reason ?? warning.reason ?? "—";
+        const issuedAt = warning.created_at ? formatDateTime(warning.created_at) : "—";
         const status = warning.status || "active"; // active / resolved
+        const statusLabel = warning.status_label || status;
         const statusClass = status === "active" ? "warning-status-active" : "warning-status-resolved";
 
         html += `
@@ -108,7 +109,7 @@ function renderWarningsTable(warnings) {
                 <td class="warning-student-col">${escapeHtml(studentName)}</td>
                 <td class="warning-reason-col">${escapeHtml(reason)}</td>
                 <td>${issuedAt}</td>
-                <td><span class="warning-status-badge ${statusClass}">${escapeHtml(status)}</span></td>
+                <td><span class="warning-status-badge ${statusClass}">${escapeHtml(statusLabel)}</span></td>
                 <td>
                     <button class="table-action-btn table-action-danger delete-warning-btn" data-id="${warning.id}" data-student="${escapeHtml(studentName)}" title="Delete">
                         <svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
