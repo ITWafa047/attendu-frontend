@@ -30,23 +30,28 @@ function clearUserFormErrors() {
 }
 
 function getUserFormData() {
+    const firstName = document.getElementById("user-first-name").value.trim();
+    const lastName = document.getElementById("user-last-name").value.trim();
+
     return {
-        first_name: document.getElementById("user-first-name").value.trim(),
-        last_name: document.getElementById("user-last-name").value.trim(),
+        name: `${firstName} ${lastName}`.trim(),
         email: document.getElementById("user-email").value.trim(),
-        phone_number: document.getElementById("user-phone").value.trim(),
+        phone: document.getElementById("user-phone").value.trim() || null,
         gender: document.getElementById("user-gender").value,
         password: document.getElementById("user-password").value,
         password_confirmation: document.getElementById("user-password-confirm").value,
+        role: "instructor",
     };
 }
 
 function validateUserForm(data) {
     const errors = {};
-    if (!data.first_name) {
+    const firstName = document.getElementById("user-first-name").value.trim();
+    const lastName = document.getElementById("user-last-name").value.trim();
+    if (!firstName) {
         errors["user-first-name"] = "First name is required";
     }
-    if (!data.last_name) {
+    if (!lastName) {
         errors["user-last-name"] = "Last name is required";
     }
     if (!data.email) {

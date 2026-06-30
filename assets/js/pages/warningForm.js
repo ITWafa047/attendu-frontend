@@ -51,8 +51,9 @@ async function openWarningModal() {
     title.textContent = "Issue Warning";
     currentStudentId = null;
 
-    // Populate student dropdown
+    // Populate student and course dropdowns
     await populateWarningStudentSelect();
+    await populateWarningCourseSelect();
 
     openModal("warning-modal");
 }
@@ -67,10 +68,38 @@ function clearWarningFormErrors() {
     });
 }
 
+async function populateWarningCourseSelect() {
+    const select = document.getElementById("warning-course-id");
+    if (!select) return;
+
+    const currentVal = select.value;
+
+    try {
+        const response = await laravelRequest(Laravel.courses.index);
+        const courses = response.data || [];
+
+        select.innerHTML = '<option value="">Select a course…</option>';
+        courses.forEach(course => {
+            const opt = document.createElement("option");
+            opt.value = course.id;
+            opt.textContent = course.course_name;
+            select.appendChild(opt);
+        });
+
+        if (currentVal && select.querySelector(`option[value="${currentVal}"]`)) {
+            select.value = currentVal;
+        }
+    } catch (err) {
+        console.error("Failed to load courses:", err);
+        showToast("Could not load courses", "error");
+    }
+}
+
 function getWarningFormData() {
     return {
         student_id: parseInt(document.getElementById("warning-student").value) || null,
-        reason: document.getElementById("warning-reason").value.trim(),
+        course_id: parseInt(document.getElementById("warning-course-id").value) || null,
+        warning_reason: document.getElementById("warning-reason").value.trim(),
     };
 }
 
@@ -79,7 +108,10 @@ function validateWarningForm(data) {
     if (!data.student_id) {
         errors["warning-student"] = "Please select a student";
     }
-    if (!data.reason) {
+    if (!data.course_id) {
+        errors["warning-course-id"] = "Please select a course";
+    }
+    if (!data.warning_reason) {
         errors["warning-reason"] = "Please provide a reason";
     }
     return { valid: Object.keys(errors).length === 0, errors };
@@ -117,7 +149,10 @@ async function submitWarningForm() {
             Laravel.warnings.store(data.student_id),
             {
                 method: "POST",
-                body: { reason: data.reason },
+                body: {
+                    course_id: data.course_id,
+                    warning_reason: data.warning_reason,
+                },
             }
         );
 

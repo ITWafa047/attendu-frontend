@@ -123,15 +123,21 @@ async function openSessionModal(mode, session = null) {
         editingSessionId = null;
         // Set default status to "scheduled"
         document.getElementById("session-status").value = "scheduled";
+        document.getElementById("session-type").value = "";
+        document.getElementById("session-date").value = "";
+        document.getElementById("session-day").value = "";
     } else if (mode === "edit" && session) {
         title.textContent = "Edit Session";
         editingSessionId = session.id;
         document.getElementById("session-title").value = session.title || "";
-        document.getElementById("session-description").value = session.description || "";
+        document.getElementById("session-description").value = session.description || session.location || "";
         document.getElementById("session-course-id").value = session.course_id || "";
         document.getElementById("session-group-id").value = session.group_id || "";
         document.getElementById("session-instructor-id").value = session.instructor_id || "";
         document.getElementById("session-status").value = session.status || "scheduled";
+        document.getElementById("session-type").value = session.session_type || "";
+        document.getElementById("session-date").value = session.session_date ? session.session_date.slice(0, 16) : (session.start_time ? session.start_time.slice(0, 16) : "");
+        updateSessionDay();
         // Format datetime-local from ISO string (e.g. "2026-07-01T10:00:00")
         if (session.start_time) {
             document.getElementById("session-start").value = session.start_time.slice(0, 16);
@@ -158,16 +164,38 @@ function clearSessionFormErrors() {
 }
 
 function getSessionFormData() {
-    return {
-        title: document.getElementById("session-title").value.trim(),
-        description: document.getElementById("session-description").value.trim(),
+    const instructorId = parseInt(document.getElementById("session-instructor-id").value) || null;
+    const sessionDate = document.getElementById("session-date").value;
+    const dayValue = document.getElementById("session-day").value || getSessionDayFromDate(sessionDate);
+    const data = {
         course_id: parseInt(document.getElementById("session-course-id").value) || null,
         group_id: parseInt(document.getElementById("session-group-id").value) || null,
-        instructor_id: parseInt(document.getElementById("session-instructor-id").value) || null,
-        status: document.getElementById("session-status").value,
+        session_type: document.getElementById("session-type").value,
+        session_date: sessionDate,
+        day: dayValue,
         start_time: document.getElementById("session-start").value,
         end_time: document.getElementById("session-end").value,
+        instructor_ids: instructorId ? [instructorId] : [],
     };
+    const location = document.getElementById("session-description").value.trim();
+    if (location) {
+        data.location = location;
+    }
+    return data;
+}
+
+function getSessionDayFromDate(sessionDate) {
+    if (!sessionDate) return "";
+    const date = new Date(sessionDate);
+    if (Number.isNaN(date.getTime())) return "";
+    return date.toLocaleDateString("en-US", { weekday: "long" });
+}
+
+function updateSessionDay() {
+    const dateInput = document.getElementById("session-date");
+    const dayInput = document.getElementById("session-day");
+    if (!dateInput || !dayInput) return;
+    dayInput.value = getSessionDayFromDate(dateInput.value);
 }
 
 function validateSessionForm(data) {
@@ -178,7 +206,13 @@ function validateSessionForm(data) {
     if (!data.group_id) {
         errors["session-group-id"] = "Please select a group";
     }
-    if (!data.instructor_id) {
+    if (!data.session_type) {
+        errors["session-type"] = "Please select a session type";
+    }
+    if (!data.session_date) {
+        errors["session-date"] = "Session date/time is required";
+    }
+    if (!data.instructor_ids || data.instructor_ids.length === 0) {
         errors["session-instructor-id"] = "Please select an instructor";
     }
     if (!data.start_time) {

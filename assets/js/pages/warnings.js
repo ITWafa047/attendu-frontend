@@ -98,7 +98,7 @@ function renderWarningsTable(warnings) {
 
     for (const warning of warnings) {
         const studentName = warning.student_name || "—";
-        const reason = warning.reason || "—";
+        const reason = warning.warning_reason || warning.reason || "—";
         const issuedAt = warning.issued_at ? formatDateTime(warning.issued_at) : "—";
         const status = warning.status || "active"; // active / resolved
         const statusClass = status === "active" ? "warning-status-active" : "warning-status-resolved";

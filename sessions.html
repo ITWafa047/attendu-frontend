@@ -79,9 +79,29 @@
                             <div class="form-error" id="session-title-error"></div>
                         </div>
                         <div class="form-group full-width">
-                            <label class="form-label" for="session-description">Description</label>
-                            <textarea class="form-textarea" id="session-description" rows="2" placeholder="Optional notes…"></textarea>
+                            <label class="form-label" for="session-description">Location</label>
+                            <textarea class="form-textarea" id="session-description" rows="2" placeholder="Optional location details…"></textarea>
                             <div class="form-error" id="session-description-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="session-type">Session Type <span class="text-muted">*</span></label>
+                            <select class="form-select" id="session-type" required>
+                                <option value="">Select a type…</option>
+                                <option value="lecture">Lecture</option>
+                                <option value="section">Section</option>
+                                <option value="lab">Lab</option>
+                            </select>
+                            <div class="form-error" id="session-type-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="session-date">Session Date <span class="text-muted">*</span></label>
+                            <input type="datetime-local" class="form-input" id="session-date" required />
+                            <div class="form-error" id="session-date-error"></div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label" for="session-day">Day</label>
+                            <input type="text" class="form-input" id="session-day" readonly />
+                            <div class="form-error" id="session-day-error"></div>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="session-course-id">Course <span class="text-muted">*</span></label>
