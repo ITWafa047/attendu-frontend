@@ -1,11 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Warnings · AttendU</title>
+
+    <!-- Base + Layout -->
+    <link rel="stylesheet" href="assets/css/base/reset.css" />
+    <link rel="stylesheet" href="assets/css/base/variables.css" />
+    <link rel="stylesheet" href="assets/css/base/typography.css" />
+    <link rel="stylesheet" href="assets/css/layout/layout.css" />
+    <link rel="stylesheet" href="assets/css/layout/sidebar.css" />
+    <link rel="stylesheet" href="assets/css/layout/navbar.css" />
+
+    <!-- Components -->
+    <link rel="stylesheet" href="assets/css/components/buttons.css" />
+    <link rel="stylesheet" href="assets/css/components/forms.css" />
+    <link rel="stylesheet" href="assets/css/components/toast.css" />
+    <link rel="stylesheet" href="assets/css/components/loader.css" />
+    <link rel="stylesheet" href="assets/css/components/tables.css" />
+    <link rel="stylesheet" href="assets/css/components/pagination.css" />
+    <link rel="stylesheet" href="assets/css/components/modals.css" />
+    <link rel="stylesheet" href="assets/css/components/badges.css" />
+
+    <!-- Shared page styles (toolbar, grid) -->
+    <link rel="stylesheet" href="assets/css/pages/courses-groups.css" />
+
+    <!-- Page-specific -->
+    <link rel="stylesheet" href="assets/css/pages/warnings.css" />
 </head>
 <body>
-    
+
+    <div class="app-shell">
+        <div id="sidebar"></div>
+
+        <div class="app-main">
+            <div id="navbar"></div>
+
+            <div class="app-content">
+                <div class="warnings-page-header">
+                    <h1>Warnings</h1>
+                    <button class="btn btn-primary" id="add-warning-btn">+ Issue Warning</button>
+                </div>
+
+                <div class="warnings-toolbar">
+                    <div class="warnings-search-wrap">
+                        <input type="text" class="form-input" id="search-warnings" placeholder="Search by student name or reason…" />
+                        <svg class="search-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="9" r="7" />
+                            <path d="M14 14L19 19" />
+                        </svg>
+                    </div>
+                    <!-- Optional: filter by status later -->
+                </div>
+
+                <div id="warnings-table-container"></div>
+                <div id="warnings-pagination-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== MODALS ====== -->
+
+    <!-- Issue Warning Modal -->
+    <div id="warning-modal" class="modal">
+        <div class="modal-overlay" data-modal-close></div>
+        <div class="modal-box modal-box-lg">
+            <div class="modal-header">
+                <h2 class="modal-title" id="warning-modal-title">Issue Warning</h2>
+                <button class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="warning-form" novalidate>
+                    <div class="warning-form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label" for="warning-student">Student <span class="text-muted">*</span></label>
+                            <select class="form-select" id="warning-student" required>
+                                <option value="">Select a student…</option>
+                            </select>
+                            <div class="form-error" id="warning-student-error"></div>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label" for="warning-reason">Reason <span class="text-muted">*</span></label>
+                            <textarea class="form-textarea" id="warning-reason" rows="3" placeholder="Describe the reason for this warning…" required></textarea>
+                            <div class="form-error" id="warning-reason-error"></div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-modal-close>Cancel</button>
+                <button class="btn btn-primary" id="warning-save-btn">Issue Warning</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-warning-modal" class="modal">
+        <div class="modal-overlay" data-modal-close></div>
+        <div class="modal-box modal-box-sm">
+            <div class="modal-header">
+                <h2 class="modal-title">Delete Warning</h2>
+                <button class="modal-close" data-modal-close>&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete the warning issued to <strong id="delete-warning-student"></strong>?</p>
+                <p class="text-muted" style="font-size:0.9rem;">This action cannot be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-modal-close>Cancel</button>
+                <button class="btn btn-danger" id="confirm-delete-warning">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== SCRIPTS ====== -->
+    <!-- Core -->
+    <script src="assets/js/core/config.js"></script>
+    <script src="assets/js/core/storage.js"></script>
+    <script src="assets/js/core/api.js"></script>
+    <script src="assets/js/core/auth.js"></script>
+    <script src="assets/js/core/ui.js"></script>
+    <script src="assets/js/core/utils.js"></script>
+    <script src="assets/js/core/validators.js"></script>
+
+    <!-- Shell -->
+    <script src="assets/js/components/sidebar.js"></script>
+    <script src="assets/js/components/navbar.js"></script>
+
+    <!-- Page-specific -->
+    <script src="assets/js/pages/warningForm.js"></script>
+    <script src="assets/js/pages/warnings.js"></script>
+
+    <!-- Init -->
+    <script>
+        (function() {
+            guardPage(["admin"]);
+            renderAppShell({ activeKey: "warnings", pageTitle: "Warnings" });
+            initWarningsPage();
+        })();
+    </script>
 </body>
 </html>
